@@ -17,6 +17,12 @@ export default {
 				'2xl': '1400px'
 			}
 		},
+		fontFamily: {
+			'joker': ['Creepster', 'cursive'],
+			'horror': ['Nosifer', 'cursive'], 
+			'gothic': ['Griffy', 'cursive'],
+			'eater': ['Eater', 'cursive'],
+		},
 		extend: {
 			colors: {
 				border: 'hsl(var(--border))',
@@ -52,13 +58,15 @@ export default {
 					DEFAULT: 'hsl(var(--card))',
 					foreground: 'hsl(var(--card-foreground))'
 				},
-				casino: {
-					gold: 'hsl(var(--casino-gold))',
-					'gold-dark': 'hsl(var(--casino-gold-dark))',
-					red: 'hsl(var(--casino-red))',
-					green: 'hsl(var(--casino-green))',
-					black: 'hsl(var(--casino-black))',
-					dark: 'hsl(var(--casino-dark))',
+				joker: {
+					purple: 'hsl(var(--joker-purple))',
+					'purple-dark': 'hsl(var(--joker-purple-dark))',
+					green: 'hsl(var(--joker-green))',
+					'green-dark': 'hsl(var(--joker-green-dark))',
+					gold: 'hsl(var(--joker-gold))',
+					'gold-dark': 'hsl(var(--joker-gold-dark))',
+					black: 'hsl(var(--joker-black))',
+					dark: 'hsl(var(--joker-dark))',
 				},
 				sidebar: {
 					DEFAULT: 'hsl(var(--sidebar-background))',
@@ -72,13 +80,18 @@ export default {
 				}
 			},
 			backgroundImage: {
+				'gradient-joker': 'var(--gradient-joker)',
+				'gradient-purple': 'var(--gradient-purple)',
+				'gradient-green': 'var(--gradient-green)',
 				'gradient-gold': 'var(--gradient-gold)',
-				'gradient-casino': 'var(--gradient-casino)',
-				'gradient-red': 'var(--gradient-red)',
+				'gradient-dark': 'var(--gradient-dark)',
 			},
 			boxShadow: {
-				'casino': 'var(--shadow-gold)',
+				'joker': 'var(--shadow-joker)',
 				'neon': 'var(--shadow-neon)',
+				'green': 'var(--shadow-green)',
+				'gold': 'var(--shadow-gold)',
+				'glow': 'var(--shadow-glow)',
 			},
 			borderRadius: {
 				lg: 'var(--radius)',

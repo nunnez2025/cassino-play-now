@@ -18,9 +18,10 @@ const buttonVariants = cva(
           "bg-secondary text-secondary-foreground hover:bg-secondary/80",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
-        casino: "bg-gradient-gold text-casino-black hover:scale-105 hover:shadow-casino transition-all duration-300 font-bold border-2 border-casino-gold-dark",
-        bet: "bg-casino-red text-white hover:bg-casino-red/90 hover:scale-105 transition-all duration-300 font-bold",
-        win: "bg-casino-green text-white hover:bg-casino-green/90 hover:scale-105 transition-all duration-300 font-bold",
+        casino: "bg-gradient-joker text-joker-black hover:scale-105 hover:shadow-glow transition-all duration-300 font-bold border-2 border-joker-purple font-joker",
+        bet: "bg-joker-purple text-white hover:bg-joker-purple-dark hover:scale-105 transition-all duration-300 font-bold shadow-joker",
+        win: "bg-joker-green text-white hover:bg-joker-green-dark hover:scale-105 transition-all duration-300 font-bold shadow-green",
+        joker: "bg-gradient-purple text-white hover:shadow-neon hover:scale-110 transition-all duration-500 font-horror border border-joker-gold",
       },
       size: {
         default: "h-10 px-4 py-2",

@@ -7,7 +7,7 @@ import SlotMachine from "@/components/SlotMachine";
 import Blackjack from "@/components/Blackjack";
 import Roulette from "@/components/Roulette";
 import CasinoStats from "@/components/CasinoStats";
-import casinoBg from "@/assets/casino-bg.jpg";
+import casinoBg from "@/assets/joker-casino-bg.jpg";
 
 const Index = () => {
   const [balance, setBalance] = useState(1000);
@@ -64,7 +64,7 @@ const Index = () => {
       className="min-h-screen bg-cover bg-center bg-fixed"
       style={{ backgroundImage: `url(${casinoBg})` }}
     >
-      <div className="min-h-screen bg-casino-black/80">
+      <div className="min-h-screen bg-joker-black/85">
         <CasinoHeader balance={balance} />
         
         <div className="container mx-auto p-6">
@@ -72,24 +72,24 @@ const Index = () => {
             {/* Main Games */}
             <div className="lg:col-span-3">
               <Tabs defaultValue="slots" className="w-full">
-                <TabsList className="grid w-full grid-cols-3 bg-casino-dark border-casino-gold">
+                <TabsList className="grid w-full grid-cols-3 bg-gradient-dark border-joker-purple">
                   <TabsTrigger 
                     value="slots" 
-                    className="data-[state=active]:bg-casino-gold data-[state=active]:text-casino-black"
+                    className="data-[state=active]:bg-gradient-joker data-[state=active]:text-joker-black font-gothic"
                   >
-                    🎰 Caça-Níqueis
+                    🃏 Joker Slots
                   </TabsTrigger>
                   <TabsTrigger 
                     value="blackjack"
-                    className="data-[state=active]:bg-casino-gold data-[state=active]:text-casino-black"
+                    className="data-[state=active]:bg-gradient-joker data-[state=active]:text-joker-black font-gothic"
                   >
-                    🃏 Blackjack
+                    🎭 Blackjack
                   </TabsTrigger>
                   <TabsTrigger 
                     value="roulette"
-                    className="data-[state=active]:bg-casino-gold data-[state=active]:text-casino-black"
+                    className="data-[state=active]:bg-gradient-joker data-[state=active]:text-joker-black font-gothic"
                   >
-                    🎯 Roleta
+                    🎪 Roleta
                   </TabsTrigger>
                 </TabsList>
                 
@@ -126,21 +126,21 @@ const Index = () => {
               
               <div className="text-center">
                 <Button 
-                  variant="win" 
+                  variant="joker" 
                   onClick={addBonus}
-                  className="w-full"
+                  className="w-full font-gothic"
                 >
-                  🎁 BONUS 500 FICHAS
+                  🎁 BONUS JOKER 500 FICHAS
                 </Button>
               </div>
 
-              <div className="bg-casino-dark border border-casino-gold rounded-lg p-4">
-                <h3 className="text-casino-gold font-bold mb-2 text-center">🏆 REGRAS</h3>
-                <div className="text-sm text-muted-foreground space-y-2">
-                  <p><strong>Caça-Níqueis:</strong> Combine símbolos para ganhar!</p>
-                  <p><strong>Blackjack:</strong> Chegue próximo de 21 sem estourar.</p>
-                  <p><strong>Roleta:</strong> Aposte em cores, números ou paridades.</p>
-                  <p className="text-casino-gold mt-3">🍀 Boa sorte!</p>
+              <div className="bg-gradient-dark border border-joker-purple rounded-lg p-4 neon-glow">
+                <h3 className="text-joker-gold font-bold mb-2 text-center font-joker">🎭 REGRAS DO JOKER</h3>
+                <div className="text-sm text-joker-gold font-gothic space-y-2">
+                  <p><strong>🃏 Joker Slots:</strong> Combine símbolos para ganhar!</p>
+                  <p><strong>🎭 Blackjack:</strong> Chegue próximo de 21, Joker vale 15!</p>
+                  <p><strong>🎪 Roleta:</strong> Aposte em cores, números ou paridades.</p>
+                  <p className="text-joker-purple mt-3 font-horror">🃏 Que a loucura traga sorte!</p>
                 </div>
               </div>
             </div>
