@@ -1,129 +1,200 @@
 
-@import url('https://fonts.googleapis.com/css2?family=Creepster&family=Nosifer&family=Griffy:ital@0;1&family=Eater&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Creepster:wght@400&family=Nosifer:wght@400&family=Caesar+Dressing:wght@400&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  /* Joker Color Palette */
-  --joker-purple: 138 43% 60%;
-  --joker-purple-dark: 138 43% 45%;
-  --joker-green: 120 100% 25%;
-  --joker-green-dark: 120 100% 20%;
-  --joker-gold: 45 100% 50%;
-  --joker-gold-dark: 45 100% 40%;
-  --joker-black: 0 0% 8%;
-  --joker-dark: 0 0% 12%;
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 3.9%;
+    --primary: 0 0% 9%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 0 0% 96.1%;
+    --secondary-foreground: 0 0% 9%;
+    --muted: 0 0% 96.1%;
+    --muted-foreground: 0 0% 45.1%;
+    --accent: 0 0% 96.1%;
+    --accent-foreground: 0 0% 9%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 89.8%;
+    --input: 0 0% 89.8%;
+    --ring: 0 0% 3.9%;
+    --chart-1: 12 76% 61%;
+    --chart-2: 173 58% 39%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+    --radius: 0.5rem;
 
-  /* Gradient Definitions */
-  --gradient-joker: linear-gradient(135deg, hsl(var(--joker-purple)) 0%, hsl(var(--joker-green)) 50%, hsl(var(--joker-gold)) 100%);
-  --gradient-purple: linear-gradient(135deg, hsl(var(--joker-purple)) 0%, hsl(var(--joker-purple-dark)) 100%);
-  --gradient-green: linear-gradient(135deg, hsl(var(--joker-green)) 0%, hsl(var(--joker-green-dark)) 100%);
-  --gradient-gold: linear-gradient(135deg, hsl(var(--joker-gold)) 0%, hsl(var(--joker-gold-dark)) 100%);
-  --gradient-dark: linear-gradient(135deg, hsl(var(--joker-black)) 0%, hsl(var(--joker-dark)) 100%);
+    /* Joker Theme Colors */
+    --joker-purple: 280 100% 45%;
+    --joker-purple-dark: 280 100% 35%;
+    --joker-gold: 45 100% 65%;
+    --joker-green: 150 80% 45%;
+    --joker-green-dark: 150 80% 35%;
+    --joker-black: 0 0% 8%;
+    --joker-dark: 255 15% 15%;
+    --casino-green: 150 80% 45%;
+    --casino-gold: 45 100% 65%;
+    --casino-red: 0 84% 60%;
+    --casino-dark: 255 15% 15%;
+  }
 
-  /* Shadow Effects */
-  --shadow-joker: 0 0 20px hsl(var(--joker-purple) / 0.6), 0 0 40px hsl(var(--joker-green) / 0.4);
-  --shadow-neon: 0 0 10px hsl(var(--joker-purple) / 0.8), 0 0 20px hsl(var(--joker-purple) / 0.6), 0 0 30px hsl(var(--joker-purple) / 0.4);
-  --shadow-green: 0 0 15px hsl(var(--joker-green) / 0.8), 0 0 25px hsl(var(--joker-green) / 0.6);
-  --shadow-gold: 0 0 15px hsl(var(--joker-gold) / 0.8), 0 0 25px hsl(var(--joker-gold) / 0.6);
-  --shadow-glow: 0 0 25px hsl(var(--joker-gold) / 0.5), 0 0 50px hsl(var(--joker-purple) / 0.3);
-
-  /* Shadcn Variables */
-  --background: 0 0% 100%;
-  --foreground: 0 0% 3.9%;
-  --card: 0 0% 100%;
-  --card-foreground: 0 0% 3.9%;
-  --popover: 0 0% 100%;
-  --popover-foreground: 0 0% 3.9%;
-  --primary: 0 0% 9%;
-  --primary-foreground: 0 0% 98%;
-  --secondary: 0 0% 96.1%;
-  --secondary-foreground: 0 0% 9%;
-  --muted: 0 0% 96.1%;
-  --muted-foreground: 0 0% 45.1%;
-  --accent: 0 0% 96.1%;
-  --accent-foreground: 0 0% 9%;
-  --destructive: 0 84.2% 60.2%;
-  --destructive-foreground: 0 0% 98%;
-  --border: 0 0% 89.8%;
-  --input: 0 0% 89.8%;
-  --ring: 0 0% 3.9%;
-  --radius: 0.5rem;
-  --chart-1: 12 76% 61%;
-  --chart-2: 173 58% 39%;
-  --chart-3: 197 37% 24%;
-  --chart-4: 43 74% 66%;
-  --chart-5: 27 87% 67%;
+  .dark {
+    --background: 0 0% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 0 0% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 0 0% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 0 0% 98%;
+    --primary-foreground: 0 0% 9%;
+    --secondary: 0 0% 14.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 0 0% 14.9%;
+    --muted-foreground: 0 0% 63.9%;
+    --accent: 0 0% 14.9%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 14.9%;
+    --input: 0 0% 14.9%;
+    --ring: 0 0% 83.1%;
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+  }
 }
 
-.dark {
-  --background: 0 0% 3.9%;
-  --foreground: 0 0% 98%;
-  --card: 0 0% 3.9%;
-  --card-foreground: 0 0% 98%;
-  --popover: 0 0% 3.9%;
-  --popover-foreground: 0 0% 98%;
-  --primary: 0 0% 98%;
-  --primary-foreground: 0 0% 9%;
-  --secondary: 0 0% 14.9%;
-  --secondary-foreground: 0 0% 98%;
-  --muted: 0 0% 14.9%;
-  --muted-foreground: 0 0% 63.9%;
-  --accent: 0 0% 14.9%;
-  --accent-foreground: 0 0% 98%;
-  --destructive: 0 62.8% 30.6%;
-  --destructive-foreground: 0 0% 98%;
-  --border: 0 0% 14.9%;
-  --input: 0 0% 14.9%;
-  --ring: 0 0% 83.1%;
-  --chart-1: 220 70% 50%;
-  --chart-2: 160 60% 45%;
-  --chart-3: 30 80% 55%;
-  --chart-4: 280 65% 60%;
-  --chart-5: 340 75% 55%;
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
 }
 
-* {
-  border-color: hsl(var(--border));
+/* Joker Theme Fonts */
+.font-joker {
+  font-family: 'Creepster', cursive;
 }
 
-body {
-  color: hsl(var(--foreground));
-  background: hsl(var(--background));
-  font-family: 'Griffy', cursive;
+.font-horror {
+  font-family: 'Nosifer', cursive;
 }
 
-/* Joker Themed Animations */
-@keyframes floating {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-10px); }
+.font-gothic {
+  font-family: 'Caesar Dressing', cursive;
+}
+
+/* Custom Text Effects */
+.neon-text {
+  text-shadow: 
+    0 0 5px hsl(var(--joker-gold)),
+    0 0 10px hsl(var(--joker-gold)),
+    0 0 15px hsl(var(--joker-gold)),
+    0 0 20px hsl(var(--joker-purple));
+  -webkit-text-stroke: 2px white;
+  text-stroke: 2px white;
+}
+
+.casino-title {
+  text-shadow: 
+    2px 2px 0px white,
+    -2px -2px 0px white,
+    2px -2px 0px white,
+    -2px 2px 0px white,
+    0 0 10px hsl(var(--joker-gold)),
+    0 0 20px hsl(var(--joker-purple)),
+    0 0 30px hsl(var(--joker-purple));
+  color: hsl(var(--joker-gold));
+}
+
+/* Casino Effects */
+.casino-glow {
+  box-shadow: 
+    0 0 20px rgba(255, 215, 0, 0.3),
+    0 0 40px rgba(138, 43, 226, 0.2),
+    inset 0 0 20px rgba(138, 43, 226, 0.1);
+}
+
+.neon-glow {
+  box-shadow: 
+    0 0 10px hsl(var(--joker-purple)),
+    0 0 20px hsl(var(--joker-purple)),
+    0 0 30px hsl(var(--joker-purple));
+}
+
+.shadow-glow {
+  box-shadow: 
+    0 4px 20px rgba(255, 215, 0, 0.4),
+    0 0 30px rgba(138, 43, 226, 0.3);
+}
+
+.shadow-neon {
+  box-shadow: 
+    0 0 15px hsl(var(--joker-purple)),
+    0 0 25px hsl(var(--joker-purple)),
+    0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.shadow-joker {
+  box-shadow: 
+    0 4px 15px rgba(138, 43, 226, 0.4),
+    0 0 20px rgba(138, 43, 226, 0.2);
+}
+
+.shadow-green {
+  box-shadow: 
+    0 4px 15px rgba(72, 187, 120, 0.4),
+    0 0 20px rgba(72, 187, 120, 0.2);
+}
+
+/* Animations */
+.shake-animation {
+  animation: shake 0.5s ease-in-out infinite alternate;
 }
 
 @keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  10%, 30%, 50%, 70%, 90% { transform: translateX(-2px); }
-  20%, 40%, 60%, 80% { transform: translateX(2px); }
+  0% { transform: translateX(-2px) rotate(-1deg); }
+  100% { transform: translateX(2px) rotate(1deg); }
 }
 
-@keyframes neonPulse {
+.spin-animation {
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.bounce-glow {
+  animation: bounceGlow 2s ease-in-out infinite;
+}
+
+@keyframes bounceGlow {
   0%, 100% { 
-    text-shadow: 0 0 5px hsl(var(--joker-purple)), 0 0 10px hsl(var(--joker-purple)), 0 0 15px hsl(var(--joker-purple)); 
+    transform: translateY(0px);
+    box-shadow: 0 0 20px hsl(var(--joker-gold));
   }
   50% { 
-    text-shadow: 0 0 10px hsl(var(--joker-gold)), 0 0 20px hsl(var(--joker-gold)), 0 0 30px hsl(var(--joker-gold)); 
+    transform: translateY(-10px);
+    box-shadow: 0 0 30px hsl(var(--joker-purple));
   }
 }
 
-@keyframes slotSpin {
-  0% { transform: rotateX(0deg); }
-  50% { transform: rotateX(180deg); }
-  100% { transform: rotateX(360deg); }
-}
-
-@keyframes rouletteWheel {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(1440deg); }
+.card-flip {
+  animation: cardFlip 1s ease-in-out;
 }
 
 @keyframes cardFlip {
@@ -132,132 +203,77 @@ body {
   100% { transform: rotateY(0deg); }
 }
 
-@keyframes glowPulse {
-  0%, 100% { 
-    box-shadow: 0 0 10px hsl(var(--joker-purple) / 0.5); 
+.fade-in {
+  animation: fadeIn 0.8s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { 
+    opacity: 0;
+    transform: translateY(20px);
   }
-  50% { 
-    box-shadow: 0 0 20px hsl(var(--joker-gold) / 0.8), 0 0 30px hsl(var(--joker-purple) / 0.6); 
+  to { 
+    opacity: 1;
+    transform: translateY(0px);
   }
 }
 
-@keyframes bounceIn {
-  0% {
-    transform: scale(0.3) translateY(-50px);
-    opacity: 0;
+.pulse-glow {
+  animation: pulseGlow 2s ease-in-out infinite;
+}
+
+@keyframes pulseGlow {
+  0%, 100% { 
+    box-shadow: 0 0 10px hsl(var(--joker-purple));
   }
-  50% {
-    transform: scale(1.05) translateY(0);
+  50% { 
+    box-shadow: 0 0 30px hsl(var(--joker-gold)), 0 0 50px hsl(var(--joker-purple));
+  }
+}
+
+/* Arena Specific Animations */
+.battle-pulse {
+  animation: battlePulse 1.5s ease-in-out infinite;
+}
+
+@keyframes battlePulse {
+  0%, 100% { 
+    transform: scale(1);
+    box-shadow: 0 0 15px hsl(var(--joker-gold));
+  }
+  50% { 
+    transform: scale(1.05);
+    box-shadow: 0 0 25px hsl(var(--joker-purple)), 0 0 35px hsl(var(--joker-gold));
+  }
+}
+
+.fighter-select {
+  animation: fighterSelect 0.5s ease-out;
+}
+
+@keyframes fighterSelect {
+  0% { 
+    transform: scale(0.95);
     opacity: 0.8;
   }
-  70% {
-    transform: scale(0.9);
-    opacity: 1;
-  }
-  100% {
+  100% { 
     transform: scale(1);
     opacity: 1;
   }
 }
 
-/* Animation Classes */
-.floating-animation {
-  animation: floating 3s ease-in-out infinite;
+.combat-flash {
+  animation: combatFlash 0.3s ease-out;
 }
 
-.shake-animation {
-  animation: shake 0.5s ease-in-out;
-}
-
-.neon-text {
-  animation: neonPulse 2s ease-in-out infinite;
-}
-
-.slot-reel {
-  animation: slotSpin 0.1s linear infinite;
-}
-
-.roulette-wheel {
-  animation: rouletteWheel 3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-}
-
-.card-flip {
-  animation: cardFlip 1s ease-in-out;
-}
-
-.casino-glow {
-  animation: glowPulse 3s ease-in-out infinite;
-}
-
-.bounce-in {
-  animation: bounceIn 0.8s ease-out;
-}
-
-/* Joker Title Styling */
-.joker-title {
-  background: linear-gradient(45deg, hsl(var(--joker-purple)), hsl(var(--joker-gold)), hsl(var(--joker-green)));
-  background-size: 200% 200%;
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: gradientShift 3s ease infinite;
-}
-
-@keyframes gradientShift {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-
-/* Glow Effects */
-.neon-glow {
-  box-shadow: var(--shadow-neon);
-}
-
-.shadow-glow {
-  box-shadow: var(--shadow-glow);
-}
-
-.shadow-gold {
-  box-shadow: var(--shadow-gold);
-}
-
-.shadow-joker {
-  box-shadow: var(--shadow-joker);
-}
-
-.shadow-green {
-  box-shadow: var(--shadow-green);
-}
-
-/* Hover Effects */
-.hover-glow:hover {
-  box-shadow: var(--shadow-glow);
-  transform: scale(1.02);
-  transition: all 0.3s ease;
-}
-
-/* Responsive Typography */
-@media (max-width: 768px) {
-  .joker-title {
-    font-size: 1.8rem;
+@keyframes combatFlash {
+  0% { 
+    background-color: transparent;
   }
-}
-
-/* Custom Scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: hsl(var(--joker-dark));
-}
-
-::-webkit-scrollbar-thumb {
-  background: hsl(var(--joker-purple));
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: hsl(var(--joker-gold));
+  50% { 
+    background-color: rgba(255, 215, 0, 0.3);
+  }
+  100% { 
+    background-color: transparent;
+  }
 }

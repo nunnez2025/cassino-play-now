@@ -8,6 +8,7 @@ import SlotMachine from "@/components/SlotMachine";
 import Blackjack from "@/components/Blackjack";
 import Roulette from "@/components/Roulette";
 import JokerGame from "@/components/JokerGame";
+import Arena from "@/components/Arena";
 import CasinoStats from "@/components/CasinoStats";
 import casinoBg from "@/assets/joker-casino-bg.jpg";
 
@@ -74,30 +75,36 @@ const Index = () => {
             {/* Main Games */}
             <div className="lg:col-span-3">
               <Tabs defaultValue="slots" className="w-full">
-                <TabsList className="grid w-full grid-cols-4 bg-gradient-dark border-joker-purple">
+                <TabsList className="grid w-full grid-cols-5 bg-gradient-dark border-joker-purple">
                   <TabsTrigger 
                     value="slots" 
-                    className="data-[state=active]:bg-gradient-joker data-[state=active]:text-joker-black font-gothic"
+                    className="data-[state=active]:bg-gradient-joker data-[state=active]:text-joker-black font-gothic text-xs"
                   >
                     🃏 Joker Slots
                   </TabsTrigger>
                   <TabsTrigger 
                     value="blackjack"
-                    className="data-[state=active]:bg-gradient-joker data-[state=active]:text-joker-black font-gothic"
+                    className="data-[state=active]:bg-gradient-joker data-[state=active]:text-joker-black font-gothic text-xs"
                   >
                     🎭 Blackjack
                   </TabsTrigger>
                   <TabsTrigger 
                     value="roulette"
-                    className="data-[state=active]:bg-gradient-joker data-[state=active]:text-joker-black font-gothic"
+                    className="data-[state=active]:bg-gradient-joker data-[state=active]:text-joker-black font-gothic text-xs"
                   >
                     🎪 Roleta
                   </TabsTrigger>
                   <TabsTrigger 
                     value="jokergame"
-                    className="data-[state=active]:bg-gradient-joker data-[state=active]:text-joker-black font-gothic"
+                    className="data-[state=active]:bg-gradient-joker data-[state=active]:text-joker-black font-gothic text-xs"
                   >
                     🎲 High-Low
+                  </TabsTrigger>
+                  <TabsTrigger 
+                    value="arena"
+                    className="data-[state=active]:bg-gradient-joker data-[state=active]:text-joker-black font-gothic text-xs"
+                  >
+                    ⚔️ Arena
                   </TabsTrigger>
                 </TabsList>
                 
@@ -124,6 +131,13 @@ const Index = () => {
 
                 <TabsContent value="jokergame" className="mt-6">
                   <JokerGame 
+                    balance={balance} 
+                    onBalanceChange={handleBalanceChange}
+                  />
+                </TabsContent>
+
+                <TabsContent value="arena" className="mt-6">
+                  <Arena 
                     balance={balance} 
                     onBalanceChange={handleBalanceChange}
                   />
@@ -156,6 +170,7 @@ const Index = () => {
                   <p><strong>🎭 Blackjack:</strong> Chegue próximo de 21, Joker vale 15!</p>
                   <p><strong>🎪 Roleta:</strong> Aposte em cores, números ou paridades.</p>
                   <p><strong>🎲 High-Low:</strong> Adivinhe se a carta será maior ou menor!</p>
+                  <p><strong>⚔️ Arena:</strong> Escolha um lutador e domine a arena!</p>
                   <p className="text-joker-purple mt-3 font-horror">🃏 Que a loucura traga sorte!</p>
                 </div>
               </div>
