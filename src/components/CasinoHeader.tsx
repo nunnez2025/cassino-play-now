@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -14,10 +15,15 @@ const CasinoHeader = ({ balance }: CasinoHeaderProps) => {
       <div className="container mx-auto flex items-center justify-between">
         <div className="flex items-center space-x-4">
           <img src={jokerLogo} alt="Joker Logo" className="w-16 h-16 floating-animation" />
-          <h1 className="text-4xl font-bold joker-title text-joker-purple">
+          <h1 className="text-4xl font-bold joker-title text-joker-purple" style={{
+            textShadow: '2px 2px 0px white, -2px -2px 0px white, 2px -2px 0px white, -2px 2px 0px white, 0px 2px 0px white, 2px 0px 0px white, 0px -2px 0px white, -2px 0px 0px white',
+            WebkitTextStroke: '1px white'
+          }}>
             🃏 JOKER'S CASINO
           </h1>
-          <span className="text-sm text-joker-gold font-horror hidden md:block">
+          <span className="text-sm text-joker-gold font-horror hidden md:block" style={{
+            textShadow: '1px 1px 0px black, -1px -1px 0px black, 1px -1px 0px black, -1px 1px 0px black'
+          }}>
             "Where Chaos Meets Fortune"
           </span>
         </div>
