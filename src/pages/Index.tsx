@@ -36,6 +36,7 @@ const Index = () => {
         playerAction: 'bet',
         result: gameResult,
         playerBalance: newBalance,
+        darkcoins: darkcoins,
         timestamp: new Date()
       });
     }
