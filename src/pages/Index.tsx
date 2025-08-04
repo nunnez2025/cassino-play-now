@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
@@ -11,11 +10,16 @@ import JokerGame from "@/components/JokerGame";
 import Arena from "@/components/Arena";
 import CasinoStats from "@/components/CasinoStats";
 import casinoBg from "@/assets/joker-casino-bg.jpg";
+import DarkCoinSystem from "@/components/DarkCoinSystem";
+import AIChat from "@/components/AIChat";
+import { aiService } from "@/services/AIService";
 
 const Index = () => {
   const [balance, setBalance] = useState(1000);
   const [initialBalance] = useState(1000);
   const [gamesPlayed, setGamesPlayed] = useState(0);
+  const [darkcoins, setDarkcoins] = useState(1000);
+  const [showAIChat, setShowAIChat] = useState(false);
   const { toast } = useToast();
 
   const handleBalanceChange = (newBalance: number) => {
@@ -24,6 +28,16 @@ const Index = () => {
     
     if (newBalance !== oldBalance) {
       setGamesPlayed(prev => prev + 1);
+      
+      // Learn from the game result
+      const gameResult = newBalance > oldBalance ? 'player_win' : 'ai_win';
+      aiService.learnFromGame({
+        gameType: 'general',
+        playerAction: 'bet',
+        result: gameResult,
+        playerBalance: newBalance,
+        timestamp: new Date()
+      });
     }
 
     // Show notifications for significant wins/losses
@@ -75,7 +89,7 @@ const Index = () => {
             {/* Main Games */}
             <div className="lg:col-span-3">
               <Tabs defaultValue="slots" className="w-full">
-                <TabsList className="grid w-full grid-cols-5 bg-gradient-dark border-joker-purple">
+                <TabsList className="grid w-full grid-cols-6 bg-gradient-dark border-joker-purple">
                   <TabsTrigger 
                     value="slots" 
                     className="data-[state=active]:bg-gradient-joker data-[state=active]:text-joker-black font-gothic text-xs"
@@ -105,6 +119,12 @@ const Index = () => {
                     className="data-[state=active]:bg-gradient-joker data-[state=active]:text-joker-black font-gothic text-xs"
                   >
                     ⚔️ Arena
+                  </TabsTrigger>
+                  <TabsTrigger 
+                    value="ai-chat" 
+                    className="data-[state=active]:bg-gradient-joker data-[state=active]:text-joker-black font-gothic text-xs"
+                  >
+                    🤖 IA Chat
                   </TabsTrigger>
                 </TabsList>
                 
@@ -142,25 +162,79 @@ const Index = () => {
                     onBalanceChange={handleBalanceChange}
                   />
                 </TabsContent>
+                
+                <TabsContent value="ai-chat" className="mt-6">
+                  <AIChat 
+                    playerStats={{
+                      balance,
+                      darkcoins,
+                      gamesPlayed
+                    }}
+                  />
+                </TabsContent>
               </Tabs>
             </div>
 
-            {/* Sidebar */}
+            {/* Enhanced Sidebar */}
             <div className="space-y-6">
               <CasinoStats 
                 balance={balance}
                 initialBalance={initialBalance}
                 gamesPlayed={gamesPlayed}
               />
+
+              <DarkCoinSystem
+                balance={balance}
+                onBalanceChange={setBalance}
+              />
               
               <div className="text-center">
                 <Button 
                   variant="joker" 
                   onClick={addBonus}
-                  className="w-full font-gothic"
+                  className="w-full font-gothic mb-2"
                 >
                   🎁 BONUS JOKER 500 FICHAS
                 </Button>
+                
+                <Button
+                  variant="bet"
+                  onClick={() => setShowAIChat(!showAIChat)}
+                  className="w-full font-gothic"
+                >
+                  🤖 {showAIChat ? 'OCULTAR' : 'CHAT COM IA'}
+                </Button>
+              </div>
+
+              {/* AI Stats Display */}
+              <div className="bg-gradient-dark border border-joker-purple rounded-lg p-4 neon-glow">
+                <h3 className="text-joker-gold font-bold mb-2 text-center font-joker">🤖 STATUS DA IA</h3>
+                <div className="text-sm text-joker-gold font-gothic space-y-1">
+                  {(() => {
+                    const stats = aiService.getAIStats();
+                    return (
+                      <>
+                        <p><strong>🧠 Jogos Analisados:</strong> {stats.gamesAnalyzed}</p>
+                        <p><strong>📊 Padrões Aprendidos:</strong> {stats.patternsLearned}</p>
+                        <p><strong>⚡ Nível de Aprendizado:</strong> {(stats.learningLevel * 100).toFixed(1)}%</p>
+                        <p><strong>🎯 Taxa de Vitória do Jogador:</strong> {(stats.playerWinRate * 100).toFixed(1)}%</p>
+                      </>
+                    );
+                  })()}
+                </div>
+              </div>
+
+              {/* Enhanced Rules */}
+              <div className="bg-gradient-dark border border-joker-purple rounded-lg p-4 neon-glow">
+                <h3 className="text-joker-gold font-bold mb-2 text-center font-joker">🎭 ECONOMIA DARKCOIN</h3>
+                <div className="text-sm text-joker-gold font-gothic space-y-2">
+                  <p><strong>🪙 DarkCoin:</strong> Moeda premium do cassino</p>
+                  <p><strong>🔥 Queima Mensal:</strong> 10% dos tokens são queimados</p>
+                  <p><strong>🏆 Prêmio Mensal:</strong> 5% do lucro da banca para o 1º lugar</p>
+                  <p><strong>🤖 IA Adversária:</strong> Aprende com seus padrões de jogo</p>
+                  <p><strong>📊 Conversão:</strong> 10 fichas = 1 DarkCoin</p>
+                  <p className="text-joker-purple mt-3 font-horror">💰 Domine a economia do caos!</p>
+                </div>
               </div>
 
               <div className="bg-gradient-dark border border-joker-purple rounded-lg p-4 neon-glow">
