@@ -5,7 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useToast } from "@/hooks/use-toast";
-import { Send, Bot, User, Zap } from "lucide-react";
+import { Send, Bot, User, Zap, Brain, TrendingUp } from "lucide-react";
+import { aiService } from "@/services/AIService";
 
 interface Message {
   id: string;
@@ -26,14 +27,14 @@ const AIChat = ({ playerStats }: AIChatProps) => {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
-      content: 'Bem-vindo ao Joker\'s Casino! 🃏 Sou a IA Coringa, sua adversária inteligente! Posso conversar sobre estratégias, analisar suas jogadas ou simplesmente bater um papo. O que você gostaria de fazer?',
+      content: 'Olá! Sou a IA Coringa 🃏 Estou sempre aprendendo com cada jogador. Analisei seus padrões e posso ajudar com estratégias ou apenas conversar. Como posso ajudar?',
       sender: 'ai',
       timestamp: new Date()
     }
   ]);
   const [inputMessage, setInputMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [aiPersonality, setAiPersonality] = useState('friendly'); // friendly, aggressive, strategic
+  const [aiPersonality, setAiPersonality] = useState<'friendly' | 'aggressive' | 'strategic'>('friendly');
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
 
@@ -46,7 +47,7 @@ const AIChat = ({ playerStats }: AIChatProps) => {
   }, [messages]);
 
   const sendMessage = async () => {
-    if (!inputMessage.trim()) return;
+    if (!inputMessage.trim() || isLoading) return;
 
     const userMessage: Message = {
       id: Date.now().toString(),
@@ -60,47 +61,46 @@ const AIChat = ({ playerStats }: AIChatProps) => {
     setIsLoading(true);
 
     try {
-      // Call the AI service through Supabase Edge Function
-      const response = await fetch('/api/ai-chat', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          message: inputMessage,
-          playerStats,
-          aiPersonality,
-          context: messages.slice(-5) // Send last 5 messages for context
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error('AI service unavailable');
-      }
-
-      const data = await response.json();
+      // Simular delay de processamento
+      await new Promise(resolve => setTimeout(resolve, 1000 + Math.random() * 2000));
       
+      // Gerar resposta usando o sistema de IA local
+      const aiResponse = aiService.generateChatResponse(
+        inputMessage, 
+        playerStats, 
+        aiPersonality
+      );
+
       const aiMessage: Message = {
         id: (Date.now() + 1).toString(),
-        content: data.response || 'Desculpe, algo deu errado. Tente novamente!',
+        content: aiResponse,
         sender: 'ai',
         timestamp: new Date()
       };
 
       setMessages(prev => [...prev, aiMessage]);
 
-      // Update AI personality based on interaction
-      updateAIPersonality(userMessage.content, data.response);
+      // Aprender com a interação
+      aiService.learnFromGame({
+        gameType: 'chat',
+        playerAction: 'message',
+        result: 'interaction',
+        playerBalance: playerStats.balance,
+        darkcoins: playerStats.darkcoins,
+        timestamp: new Date()
+      });
+
+      // Atualizar personalidade baseada na mensagem
+      updateAIPersonality(userMessage.content);
 
     } catch (error) {
-      console.error('Error sending message:', error);
+      console.error('Erro no chat:', error);
       
-      // Fallback responses when AI is unavailable
       const fallbackResponses = [
-        'Hmm, parece que estou com alguns problemas técnicos. Mas posso dizer que suas jogadas estão interessantes! 🃏',
-        'Meus circuitos estão um pouco confusos, mas continuarei observando suas estratégias! 🎭',
-        'Conexão instável por aqui, mas o jogo continua! Que tal tentar sua sorte nos slots? 🎰',
-        'Sistema temporariamente fora do ar, mas a diversão não para! Continue jogando! 🎪'
+        'Hmm, meus circuitos estão processando muitos dados... Mas continuo aprendendo com você! 🃏',
+        'Sistema ocupado analisando padrões, mas o papo continua! 🎭',
+        'Sobrecarga neural detectada, mas ainda posso conversar! 🤖',
+        'IA em recalibração... Mas suas estratégias continuam interessantes! 🧠'
       ];
 
       const aiMessage: Message = {
@@ -116,24 +116,30 @@ const AIChat = ({ playerStats }: AIChatProps) => {
     }
   };
 
-  const updateAIPersonality = (userMessage: string, aiResponse: string) => {
-    // Simple personality adaptation based on user interaction
-    if (userMessage.toLowerCase().includes('help') || userMessage.toLowerCase().includes('ajuda')) {
+  const updateAIPersonality = (userMessage: string) => {
+    const lowerMessage = userMessage.toLowerCase();
+    
+    if (lowerMessage.includes('ajuda') || lowerMessage.includes('help') || lowerMessage.includes('dica')) {
       setAiPersonality('friendly');
-    } else if (userMessage.toLowerCase().includes('strategy') || userMessage.toLowerCase().includes('estratégia')) {
-      setAiPersonality('strategic');
-    } else if (userMessage.toLowerCase().includes('challenge') || userMessage.toLowerCase().includes('desafio')) {
+    } else if (lowerMessage.includes('desafio') || lowerMessage.includes('competir') || lowerMessage.includes('battle')) {
       setAiPersonality('aggressive');
+    } else if (lowerMessage.includes('estratégia') || lowerMessage.includes('análise') || lowerMessage.includes('estatística')) {
+      setAiPersonality('strategic');
     }
   };
 
   const clearChat = () => {
     setMessages([{
-      id: '1',
-      content: 'Chat limpo! 🧹 Pronto para uma nova conversa, jogador?',
+      id: 'reset',
+      content: 'Chat reiniciado! 🔄 Meu aprendizado continua ativo. Vamos conversar!',
       sender: 'ai',
       timestamp: new Date()
     }]);
+    
+    toast({
+      title: "🤖 Chat Limpo",
+      description: "Histórico limpo mas aprendizado mantido!",
+    });
   };
 
   const getAIAvatar = () => {
@@ -147,19 +153,30 @@ const AIChat = ({ playerStats }: AIChatProps) => {
   const getPersonalityColor = () => {
     switch (aiPersonality) {
       case 'aggressive': return 'text-red-500';
-      case 'strategic': return 'text-blue-500';
+      case 'strategic': return 'text-blue-400';
       default: return 'text-joker-purple';
     }
   };
 
+  const getPersonalityName = () => {
+    switch (aiPersonality) {
+      case 'aggressive': return 'Agressiva';
+      case 'strategic': return 'Estratégica';
+      default: return 'Amigável';
+    }
+  };
+
+  // Obter estatísticas da IA
+  const aiStats = aiService.getAIStats();
+
   return (
     <Card className="bg-gradient-dark border-joker-purple casino-glow h-full flex flex-col">
       <CardHeader className="pb-2">
-        <CardTitle className="flex items-center justify-between text-joker-gold font-joker neon-text">
+        <CardTitle className="flex items-center justify-between text-joker-gold font-joker neon-text text-sm">
           <div className="flex items-center space-x-2">
-            <Bot className="w-5 h-5" />
+            <Bot className="w-4 h-4" />
             <span>IA CORINGA</span>
-            <span className={`text-lg ${getPersonalityColor()}`}>
+            <span className={`text-base ${getPersonalityColor()}`}>
               {getAIAvatar()}
             </span>
           </div>
@@ -168,21 +185,38 @@ const AIChat = ({ playerStats }: AIChatProps) => {
               variant="outline"
               size="sm"
               onClick={clearChat}
-              className="text-xs"
+              className="text-xs h-6"
             >
               Limpar
             </Button>
             <div className={`w-2 h-2 rounded-full ${isLoading ? 'bg-yellow-500 animate-pulse' : 'bg-green-500'}`} />
           </div>
         </CardTitle>
-        <div className="text-xs text-joker-purple font-gothic">
-          Modo: {aiPersonality === 'friendly' ? 'Amigável' : aiPersonality === 'aggressive' ? 'Agressiva' : 'Estratégica'} | 
-          {messages.length - 1} mensagens
+        <div className="text-xs text-joker-purple font-gothic flex justify-between">
+          <span>Modo: {getPersonalityName()}</span>
+          <span>🧠 {aiStats.gamesAnalyzed} jogos aprendidos</span>
         </div>
       </CardHeader>
 
-      <CardContent className="flex-1 flex flex-col space-y-4 min-h-0">
-        <ScrollArea className="flex-1 pr-3">
+      <CardContent className="flex-1 flex flex-col space-y-3 min-h-0">
+        {/* AI Stats Display */}
+        <div className="bg-gradient-dark border border-joker-purple rounded p-2">
+          <div className="grid grid-cols-2 gap-2 text-xs text-joker-gold">
+            <div className="flex items-center space-x-1">
+              <Brain className="w-3 h-3" />
+              <span>Nível: {(aiStats.learningLevel * 100).toFixed(0)}%</span>
+            </div>
+            <div className="flex items-center space-x-1">
+              <TrendingUp className="w-3 h-3" />
+              <span>Win Rate: {(aiStats.playerWinRate * 100).toFixed(1)}%</span>
+            </div>
+            <div className="text-xs text-joker-purple col-span-2">
+              Jogo Favorito: {aiStats.favoriteGame || 'Analisando...'}
+            </div>
+          </div>
+        </div>
+
+        <ScrollArea className="flex-1 pr-2">
           <div className="space-y-3">
             {messages.map((message) => (
               <div
@@ -190,22 +224,25 @@ const AIChat = ({ playerStats }: AIChatProps) => {
                 className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
               >
                 <div
-                  className={`max-w-[80%] p-3 rounded-lg ${
+                  className={`max-w-[85%] p-2 rounded text-sm ${
                     message.sender === 'user'
                       ? 'bg-gradient-joker text-joker-black'
                       : 'bg-gradient-dark border border-joker-purple text-joker-gold'
                   }`}
                 >
                   <div className="flex items-start space-x-2">
-                    <div className={`text-lg ${message.sender === 'user' ? 'text-joker-black' : getPersonalityColor()}`}>
+                    <div className={`text-base ${message.sender === 'user' ? 'text-joker-black' : getPersonalityColor()}`}>
                       {message.sender === 'user' ? '👤' : getAIAvatar()}
                     </div>
                     <div className="flex-1">
-                      <p className="text-sm font-gothic">{message.content}</p>
-                      <p className={`text-xs mt-1 opacity-70 ${
+                      <p className="font-gothic leading-relaxed">{message.content}</p>
+                      <p className={`text-xs mt-1 opacity-60 ${
                         message.sender === 'user' ? 'text-joker-black' : 'text-joker-purple'
                       }`}>
-                        {message.timestamp.toLocaleTimeString()}
+                        {message.timestamp.toLocaleTimeString('pt-BR', { 
+                          hour: '2-digit', 
+                          minute: '2-digit' 
+                        })}
                       </p>
                     </div>
                   </div>
@@ -214,7 +251,7 @@ const AIChat = ({ playerStats }: AIChatProps) => {
             ))}
             {isLoading && (
               <div className="flex justify-start">
-                <div className="bg-gradient-dark border border-joker-purple text-joker-gold p-3 rounded-lg">
+                <div className="bg-gradient-dark border border-joker-purple text-joker-gold p-2 rounded">
                   <div className="flex items-center space-x-2">
                     <div className={getPersonalityColor()}>{getAIAvatar()}</div>
                     <div className="flex space-x-1">
@@ -234,10 +271,10 @@ const AIChat = ({ playerStats }: AIChatProps) => {
           <Input
             value={inputMessage}
             onChange={(e) => setInputMessage(e.target.value)}
-            placeholder="Digite sua mensagem..."
+            placeholder="Converse com a IA..."
             onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
             disabled={isLoading}
-            className="flex-1 bg-joker-dark border-joker-purple text-joker-gold font-gothic"
+            className="flex-1 bg-joker-dark border-joker-purple text-joker-gold font-gothic text-sm"
           />
           <Button
             variant="joker"
@@ -245,34 +282,34 @@ const AIChat = ({ playerStats }: AIChatProps) => {
             disabled={isLoading || !inputMessage.trim()}
             className="px-3"
           >
-            <Send className="w-4 h-4" />
+            <Send className="w-3 h-3" />
           </Button>
         </div>
 
-        <div className="grid grid-cols-3 gap-1 text-xs">
+        <div className="grid grid-cols-3 gap-1">
           <Button
             variant="outline"
             size="sm"
-            onClick={() => setInputMessage("Qual é a melhor estratégia?")}
-            className="text-xs"
+            onClick={() => setInputMessage("Qual minha melhor estratégia?")}
+            className="text-xs h-6"
           >
-            Estratégia
+            📊 Análise
           </Button>
           <Button
             variant="outline"
             size="sm"
-            onClick={() => setInputMessage("Como posso melhorar?")}
-            className="text-xs"
+            onClick={() => setInputMessage("Me desafie em um jogo!")}
+            className="text-xs h-6"
           >
-            Dicas
+            ⚔️ Desafio
           </Button>
           <Button
             variant="outline"
             size="sm"
-            onClick={() => setInputMessage("Vamos jogar!")}
-            className="text-xs"
+            onClick={() => setInputMessage("Como ganhar DarkCoins?")}
+            className="text-xs h-6"
           >
-            Desafio
+            🪙 Dicas
           </Button>
         </div>
       </CardContent>
