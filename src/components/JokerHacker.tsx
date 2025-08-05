@@ -1,798 +1,99 @@
 
+import { useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import { ArrowLeft, Zap } from "lucide-react";
 
 interface JokerHackerProps {
+  balance: number;
+  onBalanceChange: (newBalance: number) => void;
   onBack: () => void;
 }
 
-const JokerHacker = ({ onBack }: JokerHackerProps) => {
+const JokerHacker = ({ balance, onBalanceChange, onBack }: JokerHackerProps) => {
   return (
-    <Card className="bg-casino-dark border-casino-gold casino-glow p-0 overflow-hidden">
-      <div className="relative">        
-        <div className="w-full h-full min-h-[600px]">
-          <iframe
-            srcDoc={`<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>JOKER HACKER - TESTE DE INVASÃO</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        :root {
-            --joker-purple: #800080;
-            --joker-green: #00ff00;
-            --joker-red: #ff0000;
-            --joker-yellow: #ffff00;
-            --dark-bg: #0a000a;
-            --darker-bg: #000000;
-            --terminal-text: #00ff00;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        body {
-            font-family: 'Courier New', monospace;
-            background: var(--darker-bg);
-            color: var(--terminal-text);
-            line-height: 1.6;
-            overflow-x: hidden;
-            position: relative;
-            min-height: 100vh;
-            touch-action: manipulation;
-        }
-
-        /* Background Image */
-        .background-image {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            background-image: url('https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjDP3a3FZ9Y7etXMr5j-2vnvlLzl0cxt1oFsfQHA5ABaAEWNVmyRMjzVCURe8aABCM1u5UPoZtRDWJl8plppsr5HjB7rjTZ1CcalHbDOVxBmNArSPSvw8b087k66vjBqJoYktoH-ea37eNF7qSvD6fVcz32TIQNhoFzvztRz9_BB80e0SqWN0vLr7_XEx83/s1600/IMG_3715.jpeg');
-            background-size: cover;
-            background-position: center;
-            opacity: 0.3;
-        }
-
-        /* Header */
-        .header {
-            background: rgba(40, 0, 40, 0.9);
-            border-bottom: 2px solid var(--joker-purple);
-            padding: 0.8rem 0;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            backdrop-filter: blur(5px);
-            text-align: center;
-        }
-
-        .logo {
-            font-family: 'Courier New', monospace;
-            font-size: 1.5rem;
-            font-weight: 900;
-            color: var(--joker-purple);
-            text-shadow: 0 0 10px var(--joker-purple);
-            animation: glow 2s ease-in-out infinite alternate;
-        }
-
-        @keyframes glow {
-            from { text-shadow: 0 0 10px var(--joker-purple); }
-            to { text-shadow: 0 0 20px var(--joker-purple), 0 0 30px var(--joker-purple); }
-        }
-
-        /* HUD */
-        .hud {
-            display: flex;
-            justify-content: space-between;
-            background: rgba(40, 0, 40, 0.8);
-            border: 1px solid var(--joker-purple);
-            border-radius: 8px;
-            padding: 0.6rem;
-            margin: 0.8rem;
-            font-size: 0.8rem;
-            flex-wrap: wrap;
-        }
-
-        .hud-item {
-            display: flex;
-            align-items: center;
-            gap: 0.3rem;
-        }
-
-        /* Main Content */
-        .main-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0.8rem;
-        }
-
-        /* Sections */
-        .section {
-            display: none;
-            animation: fadeIn 0.5s ease;
-        }
-
-        .section.active {
-            display: block;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Menu */
-        .menu-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-
-        .menu-item {
-            background: rgba(40, 0, 40, 0.8);
-            border: 2px solid var(--joker-purple);
-            border-radius: 10px;
-            padding: 1.5rem 1rem;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .menu-item:hover, .menu-item:active {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(128, 0, 128, 0.4);
-            border-color: var(--joker-green);
-        }
-
-        .menu-item::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(128, 0, 128, 0.2), transparent);
-            transition: 0.5s;
-        }
-
-        .menu-item:hover::before {
-            left: 100%;
-        }
-
-        .menu-icon {
-            font-size: 2rem;
-            margin-bottom: 0.8rem;
-            color: var(--joker-purple);
-        }
-
-        .menu-title {
-            font-size: 1.2rem;
-            color: var(--joker-green);
-            margin-bottom: 0.3rem;
-        }
-
-        /* Game Board */
-        .game-board {
-            background: rgba(20, 0, 20, 0.9);
-            border: 2px solid var(--joker-purple);
-            border-radius: 10px;
-            padding: 1.5rem;
-            margin-top: 1rem;
-            min-height: 400px;
-        }
-
-        .game-header {
-            text-align: center;
-            font-size: 1.5rem;
-            color: var(--joker-purple);
-            margin-bottom: 1rem;
-        }
-
-        /* Invasao Game */
-        .invasao-game {
-            text-align: center;
-        }
-
-        .sequence-display {
-            font-size: 3rem;
-            margin: 2rem 0;
-            min-height: 100px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
-
-        .sequence-item {
-            width: 70px;
-            height: 70px;
-            border: 2px solid var(--joker-green);
-            border-radius: 10px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: rgba(0, 20, 0, 0.5);
-            transition: all 0.2s ease;
-        }
-
-        .sequence-item.active {
-            background: var(--joker-green);
-            color: #000;
-            transform: scale(1.1);
-        }
-
-        .user-input {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            margin: 2rem 0;
-            flex-wrap: wrap;
-        }
-
-        .input-btn {
-            width: 60px;
-            height: 60px;
-            border: 2px solid var(--joker-purple);
-            border-radius: 10px;
-            background: rgba(40, 0, 40, 0.8);
-            color: var(--joker-purple);
-            font-size: 1.5rem;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .input-btn:active {
-            background: var(--joker-purple);
-            color: #fff;
-            transform: scale(0.95);
-        }
-
-        .game-status {
-            font-size: 1.2rem;
-            margin: 1rem 0;
-            min-height: 30px;
-        }
-
-        .level-indicator {
-            font-size: 1rem;
-            color: var(--joker-yellow);
-            margin-bottom: 1rem;
-        }
-
-        /* Buttons */
-        .btn {
-            background: linear-gradient(45deg, var(--joker-purple), #4b0082);
-            color: white;
-            border: none;
-            padding: 0.8rem 1.5rem;
-            border-radius: 5px;
-            cursor: pointer;
-            font-family: inherit;
-            font-weight: bold;
-            transition: all 0.3s ease;
-            margin: 0.5rem;
-            font-size: 1rem;
-        }
-
-        .btn:active {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(128, 0, 128, 0.4);
-        }
-
-        .btn-primary {
-            background: linear-gradient(45deg, var(--joker-green), #00cc00);
-            color: #000;
-        }
-
-        .btn-danger {
-            background: linear-gradient(45deg, var(--joker-red), #cc0000);
-        }
-
-        /* Progress Bar */
-        .progress-container {
-            background: rgba(0, 20, 0, 0.5);
-            border-radius: 10px;
-            overflow: hidden;
-            height: 20px;
-            margin: 1rem 0;
-            border: 1px solid var(--joker-green);
-        }
-
-        .progress-bar {
-            height: 100%;
-            background: linear-gradient(90deg, var(--joker-green), var(--joker-yellow));
-            width: 0%;
-            transition: width 0.5s ease;
-        }
-
-        /* Notification */
-        .notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 1rem;
-            background: rgba(40, 0, 40, 0.9);
-            border: 1px solid var(--joker-purple);
-            border-radius: 5px;
-            color: var(--joker-green);
-            z-index: 1000;
-            transform: translateX(200%);
-            transition: transform 0.3s ease;
-        }
-
-        .notification.show {
-            transform: translateX(0);
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .menu-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            
-            .hud {
-                flex-direction: column;
-                gap: 0.3rem;
-                padding: 0.4rem;
-            }
-            
-            .logo {
-                font-size: 1.2rem;
-            }
-            
-            .menu-item {
-                padding: 1rem;
-            }
-            
-            .sequence-item {
-                width: 50px;
-                height: 50px;
-                font-size: 2rem;
-            }
-            
-            .input-btn {
-                width: 50px;
-                height: 50px;
-                font-size: 1.2rem;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .menu-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .sequence-item {
-                width: 40px;
-                height: 40px;
-                font-size: 1.5rem;
-            }
-            
-            .input-btn {
-                width: 45px;
-                height: 45px;
-                font-size: 1.1rem;
-            }
-            
-            .game-header {
-                font-size: 1.2rem;
-            }
-        }
-    </style>
-</head>
-<body>
-    <!-- Background Image -->
-    <div class="background-image"></div>
-
-    <!-- Header -->
-    <header class="header">
-        <div class="logo">JOKER HACKER - TESTE DE INVASÃO</div>
-    </header>
-
-    <!-- HUD -->
-    <div class="hud">
-        <div class="hud-item">
-            <i class="fas fa-user-secret"></i>
-            <span>Reputação: <span id="reputation">100</span></span>
-        </div>
-        <div class="hud-item">
-            <i class="fas fa-coins"></i>
-            <span>Bits: <span id="bits">500</span></span>
-        </div>
-        <div class="hud-item">
-            <i class="fas fa-microchip"></i>
-            <span>Nível: <span id="level">1</span></span>
-        </div>
-        <div class="hud-item">
-            <i class="fas fa-battery-three-quarters"></i>
-            <span>Energia:</span>
-            <div class="progress-container" style="width: 80px;">
-                <div class="progress-bar" id="energy-bar" style="width: 80%;"></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Main Content -->
-    <div class="main-content">
-        <!-- Menu Section -->
-        <div id="menu-section" class="section active">
-            <div class="menu-grid">
-                <div class="menu-item" onclick="showSection('invasao')">
-                    <div class="menu-icon"><i class="fas fa-brain"></i></div>
-                    <div class="menu-title">TESTE DE INVASÃO</div>
-                    <div>Protocolo Mental</div>
-                </div>
-                <div class="menu-item" onclick="showSection('missions')">
-                    <div class="menu-icon"><i class="fas fa-bullseye"></i></div>
-                    <div class="menu-title">MISSÕES</div>
-                    <div>Invasões</div>
-                </div>
-                <div class="menu-item" onclick="showSection('shop')">
-                    <div class="menu-icon"><i class="fas fa-shopping-cart"></i></div>
-                    <div class="menu-title">LOJA</div>
-                    <div>Upgrades</div>
-                </div>
-                <div class="menu-item" onclick="showSection('profile')">
-                    <div class="menu-icon"><i class="fas fa-user"></i></div>
-                    <div class="menu-title">PERFIL</div>
-                    <div>Status</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Invasao Section -->
-        <div id="invasao-section" class="section">
-            <div class="game-board">
-                <div class="game-header">TESTE DE INVASÃO - PROTOCOLO MENTAL</div>
-                <div class="invasao-game">
-                    <div class="level-indicator">Nível: <span id="invasao-level">1</span> | Sequência: <span id="sequence-length">3</span> símbolos</div>
-                    
-                    <div class="sequence-display" id="sequence-display">
-                        <div class="sequence-item">?</div>
-                        <div class="sequence-item">?</div>
-                        <div class="sequence-item">?</div>
-                    </div>
-                    
-                    <div class="game-status" id="game-status">Toque em INICIAR para começar</div>
-                    
-                    <div class="user-input">
-                        <button class="input-btn" onclick="selectSymbol('▲')">▲</button>
-                        <button class="input-btn" onclick="selectSymbol('●')">●</button>
-                        <button class="input-btn" onclick="selectSymbol('■')">■</button>
-                        <button class="input-btn" onclick="selectSymbol('♦')">♦</button>
-                    </div>
-                    
-                    <button class="btn btn-primary" onclick="startInvasao()" id="start-invasao-btn">
-                        <i class="fas fa-play"></i> INICIAR
-                    </button>
-                    <button class="btn" onclick="resetInvasao()">
-                        <i class="fas fa-redo"></i> REINICIAR
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Missions Section -->
-        <div id="missions-section" class="section">
-            <div class="game-board">
-                <div class="game-header">MISSÕES DE INVASÃO</div>
-                <div style="text-align: center; padding: 2rem;">
-                    <i class="fas fa-lock" style="font-size: 3rem; color: var(--joker-purple); margin-bottom: 1rem;"></i>
-                    <p>Complete o teste de invasão para desbloquear missões!</p>
-                    <button class="btn" onclick="showSection('invasao')">
-                        <i class="fas fa-brain"></i> IR PARA TESTE
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Shop Section -->
-        <div id="shop-section" class="section">
-            <div class="game-board">
-                <div class="game-header">LOJA DE UPGRADES</div>
-                <div style="text-align: center; padding: 2rem;">
-                    <i class="fas fa-store" style="font-size: 3rem; color: var(--joker-purple); margin-bottom: 1rem;"></i>
-                    <p>Ganhe bits completando missões e testes!</p>
-                    <button class="btn" onclick="showSection('invasao')">
-                        <i class="fas fa-brain"></i> FAZER TESTE
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Profile Section -->
-        <div id="profile-section" class="section">
-            <div class="game-board">
-                <div class="game-header">PERFIL DO CORINGA</div>
-                <div style="display: flex; flex-wrap: wrap; gap: 1.5rem;">
-                    <div style="flex: 1; min-width: 250px;">
-                        <h3 style="color: var(--joker-purple); margin-bottom: 1rem;">HABILIDADES</h3>
-                        <div style="margin-bottom: 1rem;">
-                            <div>Velocidade: <span id="speed-level">1</span>/10</div>
-                            <div class="progress-container">
-                                <div class="progress-bar" id="speed-bar" style="width: 10%;"></div>
-                            </div>
-                        </div>
-                        <div style="margin-bottom: 1rem;">
-                            <div>Lógica: <span id="logic-level">1</span>/10</div>
-                            <div class="progress-container">
-                                <div class="progress-bar" id="logic-bar" style="width: 10%;"></div>
-                            </div>
-                        </div>
-                        <div style="margin-bottom: 1rem;">
-                            <div>Memória: <span id="memory-level">1</span>/10</div>
-                            <div class="progress-container">
-                                <div class="progress-bar" id="memory-bar" style="width: 10%;"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div style="flex: 1; min-width: 250px;">
-                        <h3 style="color: var(--joker-purple); margin-bottom: 1rem;">CONQUISTAS</h3>
-                        <div id="achievements">
-                            <div style="padding: 0.5rem; border-bottom: 1px solid var(--joker-purple);">
-                                <i class="fas fa-trophy"></i> Primeiro Teste
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Notification -->
-    <div id="notification" class="notification"></div>
-
-    <script>
-        // Initialize game
-        document.addEventListener('DOMContentLoaded', function() {
-            initializeGame();
-        });
-
-        // Game State
-        const gameState = {
-            reputation: 100,
-            bits: 500,
-            level: 1,
-            energy: 80,
-            skills: {
-                speed: 1,
-                logic: 1,
-                memory: 1
-            },
-            invasao: {
-                level: 1,
-                sequenceLength: 3,
-                currentSequence: [],
-                userSequence: [],
-                showingSequence: false,
-                activeIndex: -1
-            }
-        };
-
-        // Initialize Game
-        function initializeGame() {
-            updateHUD();
-            showNotification("Bem-vindo ao teste de invasão, Coringa!", "success");
-        }
-
-        // Update HUD
-        function updateHUD() {
-            document.getElementById('reputation').textContent = gameState.reputation;
-            document.getElementById('bits').textContent = gameState.bits;
-            document.getElementById('level').textContent = gameState.level;
-            document.getElementById('energy-bar').style.width = gameState.energy + '%';
-            
-            // Update skill bars
-            document.getElementById('speed-bar').style.width = (gameState.skills.speed * 10) + '%';
-            document.getElementById('logic-bar').style.width = (gameState.skills.logic * 10) + '%';
-            document.getElementById('memory-bar').style.width = (gameState.skills.memory * 10) + '%';
-            
-            document.getElementById('speed-level').textContent = gameState.skills.speed;
-            document.getElementById('logic-level').textContent = gameState.skills.logic;
-            document.getElementById('memory-level').textContent = gameState.skills.memory;
-        }
-
-        // Show Section
-        function showSection(sectionId) {
-            // Hide all sections
-            document.querySelectorAll('.section').forEach(section => {
-                section.classList.remove('active');
-            });
-            
-            // Show selected section
-            document.getElementById(sectionId + '-section').classList.add('active');
-            
-            // Update HUD
-            updateHUD();
-        }
-
-        // Invasao Game Functions
-        function startInvasao() {
-            if (gameState.invasao.showingSequence) return;
-            
-            document.getElementById('start-invasao-btn').disabled = true;
-            document.getElementById('game-status').textContent = "Memorize o protocolo de invasão...";
-            
-            // Generate new sequence
-            gameState.invasao.currentSequence = [];
-            const symbols = ['▲', '●', '■', '♦'];
-            
-            for (let i = 0; i < gameState.invasao.sequenceLength; i++) {
-                const randomSymbol = symbols[Math.floor(Math.random() * symbols.length)];
-                gameState.invasao.currentSequence.push(randomSymbol);
-            }
-            
-            // Display sequence
-            showSequence();
-        }
-
-        function showSequence() {
-            gameState.invasao.showingSequence = true;
-            gameState.invasao.userSequence = [];
-            const display = document.getElementById('sequence-display');
-            
-            // Clear display
-            display.innerHTML = '';
-            
-            // Create sequence items
-            gameState.invasao.currentSequence.forEach((symbol, index) => {
-                const item = document.createElement('div');
-                item.className = 'sequence-item';
-                item.textContent = '?';
-                item.id = \`seq-item-\${index}\`;
-                display.appendChild(item);
-            });
-            
-            // Show symbols one by one
-            let i = 0;
-            const showInterval = setInterval(() => {
-                if (i < gameState.invasao.currentSequence.length) {
-                    const item = document.getElementById(\`seq-item-\${i}\`);
-                    item.textContent = gameState.invasao.currentSequence[i];
-                    item.classList.add('active');
-                    
-                    setTimeout(() => {
-                        item.classList.remove('active');
-                        i++;
-                    }, 500);
-                } else {
-                    clearInterval(showInterval);
-                    setTimeout(() => {
-                        // Hide symbols
-                        const items = display.querySelectorAll('.sequence-item');
-                        items.forEach(item => {
-                            item.textContent = '?';
-                        });
-                        
-                        gameState.invasao.showingSequence = false;
-                        document.getElementById('game-status').textContent = "Repita o protocolo tocando nos símbolos";
-                        document.getElementById('start-invasao-btn').disabled = false;
-                    }, 1000);
-                }
-            }, 1000);
-        }
-
-        function selectSymbol(symbol) {
-            if (gameState.invasao.showingSequence) return;
-            if (gameState.invasao.userSequence.length >= gameState.invasao.currentSequence.length) return;
-            
-            // Add to user sequence
-            gameState.invasao.userSequence.push(symbol);
-            
-            // Update display
-            const currentIndex = gameState.invasao.userSequence.length - 1;
-            if (currentIndex < gameState.invasao.sequenceLength) {
-                const item = document.getElementById(\`seq-item-\${currentIndex}\`);
-                if (item) {
-                    item.textContent = symbol;
-                    item.classList.add('active');
-                    setTimeout(() => {
-                        item.classList.remove('active');
-                    }, 300);
-                }
-            }
-            
-            // Check if sequence is complete
-            if (gameState.invasao.userSequence.length === gameState.invasao.currentSequence.length) {
-                checkSequence();
-            }
-        }
-
-        function checkSequence() {
-            const isCorrect = JSON.stringify(gameState.invasao.userSequence) === 
-                             JSON.stringify(gameState.invasao.currentSequence);
-            
-            if (isCorrect) {
-                document.getElementById('game-status').textContent = "Protocolo executado com sucesso!";
-                gameState.invasao.level++;
-                gameState.invasao.sequenceLength = Math.min(gameState.invasao.level + 2, 5);
-                gameState.bits += gameState.invasao.level * 10;
-                gameState.reputation += 5;
-                updateHUD();
-                showNotification(\`Nível \${gameState.invasao.level} completo! +\${gameState.invasao.level * 10} bits\`, "success");
-            } else {
-                document.getElementById('game-status').textContent = "Falha no protocolo! Tente novamente.";
-                showNotification("Sequência incorreta! Tente novamente.", "error");
-            }
-            
-            // Update level display
-            document.getElementById('invasao-level').textContent = gameState.invasao.level;
-            document.getElementById('sequence-length').textContent = gameState.invasao.sequenceLength;
-        }
-
-        function resetInvasao() {
-            gameState.invasao.level = 1;
-            gameState.invasao.sequenceLength = 3;
-            gameState.invasao.currentSequence = [];
-            gameState.invasao.userSequence = [];
-            gameState.invasao.showingSequence = false;
-            
-            document.getElementById('sequence-display').innerHTML = \`
-                <div class="sequence-item">?</div>
-                <div class="sequence-item">?</div>
-                <div class="sequence-item">?</div>
-            \`;
-            
-            document.getElementById('game-status').textContent = "Toque em INICIAR para começar";
-            document.getElementById('invasao-level').textContent = gameState.invasao.level;
-            document.getElementById('sequence-length').textContent = gameState.invasao.sequenceLength;
-            document.getElementById('start-invasao-btn').disabled = false;
-            
-            showNotification("Teste reiniciado", "info");
-        }
-
-        // Show Notification
-        function showNotification(message, type = 'info') {
-            const notification = document.getElementById('notification');
-            notification.textContent = message;
-            notification.className = 'notification show';
-            
-            if (type === 'success') {
-                notification.style.borderColor = '#00ff00';
-                notification.style.color = '#00ff00';
-            } else if (type === 'error') {
-                notification.style.borderColor = '#ff0000';
-                notification.style.color = '#ff0000';
-            } else {
-                notification.style.borderColor = '#800080';
-                notification.style.color = '#800080';
-            }
-            
-            setTimeout(() => {
-                notification.className = 'notification';
-            }, 3000);
-        }
-    </script>
-</body>
-</html>`}
-            width="100%"
-            height="600px"
-            style={{ border: 'none' }}
-          />
-        </div>
-        
-        <div className="p-4 text-center">
-          <Button 
-            onClick={onBack}
-            variant="casino"
-            className="px-8 py-2"
+    <Card className="bg-gradient-to-br from-joker-dark to-joker-black border-2 border-joker-purple casino-glow">
+      <CardHeader className="pb-4">
+        <CardTitle className="text-2xl font-joker text-center">
+          <span 
+            className="text-joker-gold"
+            style={{
+              textShadow: '2px 2px 4px rgba(0, 0, 0, 0.8), 0 0 10px hsl(45 100% 70%)',
+              WebkitTextStroke: '1px rgba(128, 0, 128, 0.3)'
+            }}
           >
-            ← Voltar
+            🎭 JOKER HACKER 🎭
+          </span>
+        </CardTitle>
+        <div className="text-center">
+          <p 
+            className="text-joker-purple font-gothic text-lg font-bold"
+            style={{
+              textShadow: '1px 1px 2px rgba(0, 0, 0, 0.9)'
+            }}
+          >
+            Teste de Invasão Mental
+          </p>
+        </div>
+      </CardHeader>
+
+      <CardContent className="space-y-6">
+        {/* Game Preview */}
+        <div className="relative bg-joker-black border-2 border-joker-purple rounded-lg overflow-hidden shadow-neon">
+          <div 
+            className="absolute inset-0 opacity-20 bg-cover bg-center"
+            style={{
+              backgroundImage: `url('https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=800&h=600')`
+            }}
+          />
+          <div className="relative">
+            <iframe
+              src="data:text/html;charset=utf-8,%3C!DOCTYPE%20html%3E%0A%3Chtml%20lang%3D%22pt-BR%22%3E%0A%3Chead%3E%0A%20%20%20%20%3Cmeta%20charset%3D%22UTF-8%22%3E%0A%20%20%20%20%3Cmeta%20name%3D%22viewport%22%20content%3D%22width%3Ddevice-width%2C%20initial-scale%3D1.0%2C%20maximum-scale%3D1.0%2C%20user-scalable%3Dno%22%3E%0A%20%20%20%20%3Ctitle%3EJOKER%20HACKER%20-%20TESTE%20DE%20INVAS%C3%83O%3C/title%3E%0A%20%20%20%20%3Clink%20rel%3D%22stylesheet%22%20href%3D%22https%3A//cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css%22%3E%0A%20%20%20%20%3Cstyle%3E%0A%20%20%20%20%20%20%20%20%3Aroot%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20--joker-purple%3A%20%23800080%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20--joker-green%3A%20%2300ff00%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20--joker-red%3A%20%23ff0000%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20--joker-yellow%3A%20%23ffff00%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20--dark-bg%3A%20%230a000a%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20--darker-bg%3A%20%23000000%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20--terminal-text%3A%20%2300ff00%3B%0A%20%20%20%20%20%20%20%20%7D%0A%0A%20%20%20%20%20%20%20%20*%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20margin%3A%200%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20padding%3A%200%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20box-sizing%3A%20border-box%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20-webkit-tap-highlight-color%3A%20transparent%3B%0A%20%20%20%20%20%20%20%20%7D%0A%0A%20%20%20%20%20%20%20%20body%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20font-family%3A%20'Courier%20New'%2C%20monospace%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20background%3A%20var%28--darker-bg%29%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20color%3A%20var%28--terminal-text%29%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20line-height%3A%201.6%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20overflow-x%3A%20hidden%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20position%3A%20relative%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20min-height%3A%20100vh%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20touch-action%3A%20manipulation%3B%0A%20%20%20%20%20%20%20%20%7D%0A%0A%20%20%20%20%20%20%20%20/*%20Background%20Image%20*/%0A%20%20%20%20%20%20%20%20.background-image%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20position%3A%20fixed%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20top%3A%200%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20left%3A%200%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20width%3A%20100%25%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20height%3A%20100%25%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20z-index%3A%20-1%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20background-image%3A%20url%28'https%3A//images.unsplash.com/photo-1518770660439-4636190af475%3Fauto%3Dformat%26fit%3Dcrop%26w%3D1200%26h%3D800'%29%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20background-size%3A%20cover%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20background-position%3A%20center%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20opacity%3A%200.3%3B%0A%20%20%20%20%20%20%20%20%7D%0A%0A%20%20%20%20%20%20%20%20/*%20Header%20*/%0A%20%20%20%20%20%20%20%20.header%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20background%3A%20rgba%2840%2C%200%2C%2040%2C%200.9%29%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20border-bottom%3A%202px%20solid%20var%28--joker-purple%29%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20padding%3A%200.8rem%200%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20position%3A%20sticky%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20top%3A%200%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20z-index%3A%20100%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20backdrop-filter%3A%20blur%285px%29%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20text-align%3A%20center%3B%0A%20%20%20%20%20%20%20%20%7D%0A%0A%20%20%20%20%20%20%20%20.logo%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20font-family%3A%20'Courier%20New'%2C%20monospace%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20font-size%3A%201.5rem%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20font-weight%3A%20900%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20color%3A%20var%28--joker-purple%29%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20text-shadow%3A%200%200%2010px%20var%28--joker-purple%29%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20animation%3A%20glow%202s%20ease-in-out%20infinite%20alternate%3B%0A%20%20%20%20%20%20%20%20%7D%0A%0A%20%20%20%20%20%20%20%20%40keyframes%20glow%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20from%20%7B%20text-shadow%3A%200%200%2010px%20var%28--joker-purple%29%3B%20%7D%0A%20%20%20%20%20%20%20%20%20%20%20%20to%20%7B%20text-shadow%3A%200%200%2020px%20var%28--joker-purple%29%2C%200%200%2030px%20var%28--joker-purple%29%3B%20%7D%0A%20%20%20%20%20%20%20%20%7D%0A%0A%20%20%20%20%20%20%20%20/*%20HUD%20*/%0A%20%20%20%20%20%20%20%20.hud%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20display%3A%20flex%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20justify-content%3A%20space-between%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20background%3A%20rgba%2840%2C%200%2C%2040%2C%200.8%29%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20border%3A%201px%20solid%20var%28--joker-purple%29%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20border-radius%3A%208px%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20padding%3A%200.6rem%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20margin%3A%200.8rem%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20font-size%3A%200.8rem%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20flex-wrap%3A%20wrap%3B%0A%20%20%20%20%20%20%20%20%7D%0A%0A%20%20%20%20%20%20%20%20.hud-item%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20display%3A%20flex%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20align-items%3A%20center%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20gap%3A%200.3rem%3B%0A%20%20%20%20%20%20%20%20%7D%0A%0A%20%20%20%20%20%20%20%20/*%20Main%20Content%20*/%0A%20%20%20%20%20%20%20%20.main-content%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20max-width%3A%201200px%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20margin%3A%200%20auto%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20padding%3A%200.8rem%3B%0A%20%20%20%20%20%20%20%20%7D%0A%0A%20%20%20%20%20%20%20%20/*%20Sections%20*/%0A%20%20%20%20%20%20%20%20.section%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20display%3A%20none%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20animation%3A%20fadeIn%200.5s%20ease%3B%0A%20%20%20%20%20%20%20%20%7D%0A%0A%20%20%20%20%20%20%20%20.section.active%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20display%3A%20block%3B%0A%20%20%20%20%20%20%20%20%7D%0A%0A%20%20%20%20%20%20%20%20%40keyframes%20fadeIn%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20from%20%7B%20opacity%3A%200%3B%20transform%3A%20translateY%2820px%29%3B%20%7D%0A%20%20%20%20%20%20%20%20%20%20%20%20to%20%7B%20opacity%3A%201%3B%20transform%3A%20translateY%280%29%3B%20%7D%0A%20%20%20%20%20%20%20%20%7D%0A%0A%20%20%20%20%20%20%20%20/*%20Menu%20*/%0A%20%20%20%20%20%20%20%20.menu-grid%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20display%3A%20grid%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20grid-template-columns%3A%20repeat%28auto-fit%2C%20minmax%28150px%2C%201fr%29%29%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20gap%3A%201rem%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20margin-top%3A%201rem%3B%0A%20%20%20%20%20%20%20%20%7D%0A%0A%20%20%20%20%20%20%20%20.menu-item%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20background%3A%20rgba%2840%2C%200%2C%2040%2C%200.8%29%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20border%3A%202px%20solid%20var%28--joker-purple%29%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20border-radius%3A%2010px%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20padding%3A%201.5rem%201rem%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20text-align%3A%20center%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20cursor%3A%20pointer%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20transition%3A%20all%200.3s%20ease%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20position%3A%20relative%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20overflow%3A%20hidden%3B%0A%20%20%20%20%20%20%20%20%7D%0A%0A%20%20%20%20%20%20%20%20.menu-item%3Ahover%2C%20.menu-item%3Aactive%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20transform%3A%20translateY%28-5px%29%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20box-shadow%3A%200%2010px%2025px%20rgba%28128%2C%200%2C%20128%2C%200.4%29%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20border-color%3A%20var%28--joker-green%29%3B%0A%20%20%20%20%20%20%20%20%7D%0A%0A%20%20%20%20%20%20%20%20.menu-item%3A%3Abefore%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20content%3A%20''%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20position%3A%20absolute%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20top%3A%200%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20left%3A%20-100%25%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20width%3A%20100%25%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20height%3A%20100%25%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20background%3A%20linear-gradient%2890deg%2C%20transparent%2C%20rgba%28128%2C%200%2C%20128%2C%200.2%29%2C%20transparent%29%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20transition%3A%200.5s%3B%0A%20%20%20%20%20%20%20%20%7D%0A%0A%20%20%20%20%20%20%20%20.menu-item%3Ahover%3A%3Abefore%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20left%3A%20100%25%3B%0A%20%20%20%20%20%20%20%20%7D%0A%0A%20%20%20%20%20%20%20%20.menu-icon%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20font-size%3A%202rem%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20margin-bottom%3A%200.8rem%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20color%3A%20var%28--joker-purple%29%3B%0A%20%20%20%20%20%20%20%20%7D%0A%0A%20%20%20%20%20%20%20%20.menu-title%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20font-size%3A%201.2rem%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20color%3A%20var%28--joker-green%29%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20margin-bottom%3A%200.3rem%3B%0A%20%20%20%20%20%20%20%20%7D%0A%0A%20%20%20%20%20%20%20%20/*%20Game%20Board%20*/%0A%20%20%20%20%20%20%20%20.game-board%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20background%3A%20rgba%2820%2C%200%2C%2020%2C%200.9%29%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20border%3A%202px%20solid%20var%28--joker-purple%29%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20border-radius%3A%2010px%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20padding%3A%201.5rem%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20margin-top%3A%201rem%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20min-height%3A%20400px%3B%0A%20%20%20%20%20%20%20%20%7D%0A%0A%20%20%20%20%20%20%20%20.game-header%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20text-align%3A%20center%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20font-size%3A%201.5rem%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20color%3A%20var%28--joker-purple%29%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20margin-bottom%3A%201rem%3B%0A%20%20%20%20%20%20%20%20%7D%0A%0A%20%20%20%20%20%20%20%20/*%20Invasao%20Game%20*/%0A%20%20%20%20%20%20%20%20.invasao-game%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20text-align%3A%20center%3B%0A%20%20%20%20%20%20%20%20%7D%0A%0A%20%20%20%20%20%20%20%20.sequence-display%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20font-size%3A%203rem%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20margin%3A%202rem%200%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20min-height%3A%20100px%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20display%3A%20flex%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20justify-content%3A%20center%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20align-items%3A%20center%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20flex-wrap%3A%20wrap%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20gap%3A%201rem%3B%0A%20%20%20%20%20%20%20%20%7D%0A%0A%20%20%20%20%20%20%20%20.sequence-item%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20width%3A%2070px%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20height%3A%2070px%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20border%3A%202px%20solid%20var%28--joker-green%29%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20border-radius%3A%2010px%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20display%3A%20flex%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20justify-content%3A%20center%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20align-items%3A%20center%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20background%3A%20rgba%280%2C%2020%2C%200%2C%200.5%29%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20transition%3A%20all%200.2s%20ease%3B%0A%20%20%20%20%20%20%20%20%7D%0A%0A%20%20%20%20%20%20%20%20.sequence-item.active%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20background%3A%20var%28--joker-green%29%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20color%3A%20%23000%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20transform%3A%20scale%281.1%29%3B%0A%20%20%20%20%20%20%20%20%7D%0A%0A%20%20%20%20%20%20%20%20.user-input%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20display%3A%20flex%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20justify-content%3A%20center%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20gap%3A%201rem%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20margin%3A%202rem%200%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20flex-wrap%3A%20wrap%3B%0A%20%20%20%20%20%20%20%20%7D%0A%0A%20%20%20%20%20%20%20%20.input-btn%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20width%3A%2060px%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20height%3A%2060px%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20border%3A%202px%20solid%20var%28--joker-purple%29%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20border-radius%3A%2010px%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20background%3A%20rgba%2840%2C%200%2C%2040%2C%200.8%29%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20color%3A%20var%28--joker-purple%29%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20font-size%3A%201.5rem%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20cursor%3A%20pointer%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20transition%3A%20all%200.2s%20ease%3B%0A%20%20%20%20%20%20%20%20%7D%0A%0A%20%20%20%20%20%20%20%20.input-btn%3Aactive%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20background%3A%20var%28--joker-purple%29%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20color%3A%20%23fff%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20transform%3A%20scale%280.95%29%3B%0A%20%20%20%20%20%20%20%20%7D%0A%0A%20%20%20%20%20%20%20%20.game-status%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20font-size%3A%201.2rem%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20margin%3A%201rem%200%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20min-height%3A%2030px%3B%0A%20%20%20%20%20%20%20%20%7D%0A%0A%20%20%20%20%20%20%20%20.level-indicator%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20font-size%3A%201rem%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20color%3A%20var%28--joker-yellow%29%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20margin-bottom%3A%201rem%3B%0A%20%20%20%20%20%20%20%20%7D%0A%0A%20%20%20%20%20%20%20%20/*%20Buttons%20*/%0A%20%20%20%20%20%20%20%20.btn%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20background%3A%20linear-gradient%2845deg%2C%20var%28--joker-purple%29%2C%20%234b0082%29%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20color%3A%20white%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20border%3A%20none%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20padding%3A%200.8rem%201.5rem%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20border-radius%3A%205px%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20cursor%3A%20pointer%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20font-family%3A%20inherit%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20font-weight%3A%20bold%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20transition%3A%20all%200.3s%20ease%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20margin%3A%200.5rem%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20font-size%3A%201rem%3B%0A%20%20%20%20%20%20%20%20%7D%0A%0A%20%20%20%20%20%20%20%20.btn%3Aactive%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20transform%3A%20translateY%28-3px%29%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20box-shadow%3A%200%205px%2015px%20rgba%28128%2C%200%2C%20128%2C%200.4%29%3B%0A%20%20%20%20%20%20%20%20%7D%0A%0A%20%20%20%20%20%20%20%20.btn-primary%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20background%3A%20linear-gradient%2845deg%2C%20var%28--joker-green%29%2C%20%2300cc00%29%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20color%3A%20%23000%3B%0A%20%20%20%20%20%20%20%20%7D%0A%0A%20%20%20%20%20%20%20%20.btn-danger%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20background%3A%20linear-gradient%2845deg%2C%20var%28--joker-red%29%2C%20%23cc0000%29%3B%0A%20%20%20%20%20%20%20%20%7D%0A%0A%20%20%20%20%20%20%20%20/*%20Progress%20Bar%20*/%0A%20%20%20%20%20%20%20%20.progress-container%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20background%3A%20rgba%280%2C%2020%2C%200%2C%200.5%29%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20border-radius%3A%2010px%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20overflow%3A%20hidden%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20height%3A%2020px%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20margin%3A%201rem%200%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20border%3A%201px%20solid%20var%28--joker-green%29%3B%0A%20%20%20%20%20%20%20%20%7D%0A%0A%20%20%20%20%20%20%20%20.progress-bar%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20height%3A%20100%25%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20background%3A%20linear-gradient%2890deg%2C%20var%28--joker-green%29%2C%20var%28--joker-yellow%29%29%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20width%3A%200%25%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20transition%3A%20width%200.5s%20ease%3B%0A%20%20%20%20%20%20%20%20%7D%0A%0A%20%20%20%20%20%20%20%20/*%20Notification%20*/%0A%20%20%20%20%20%20%20%20.notification%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20position%3A%20fixed%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20top%3A%2020px%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20right%3A%2020px%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20padding%3A%201rem%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20background%3A%20rgba%2840%2C%200%2C%2040%2C%200.9%29%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20border%3A%201px%20solid%20var%28--joker-purple%29%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20border-radius%3A%205px%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20color%3A%20var%28--joker-green%29%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20z-index%3A%201000%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20transform%3A%20translateX%28200%25%29%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20transition%3A%20transform%200.3s%20ease%3B%0A%20%20%20%20%20%20%20%20%7D%0A%0A%20%20%20%20%20%20%20%20.notification.show%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20transform%3A%20translateX%280%29%3B%0A%20%20%20%20%20%20%20%20%7D%0A%0A%20%20%20%20%20%20%20%20/*%20Responsive%20*/%0A%20%20%20%20%20%20%20%20%40media%20%28max-width%3A%20768px%29%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20.menu-grid%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20grid-template-columns%3A%20repeat%282%2C%201fr%29%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%20%20%20%20%0A%20%20%20%20%20%20%20%20%20%20%20%20.hud%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20flex-direction%3A%20column%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20gap%3A%200.3rem%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20padding%3A%200.4rem%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%20%20%20%20%0A%20%20%20%20%20%20%20%20%20%20%20%20.logo%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20font-size%3A%201.2rem%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%20%20%20%20%0A%20%20%20%20%20%20%20%20%20%20%20%20.menu-item%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20padding%3A%201rem%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%20%20%20%20%0A%20%20%20%20%20%20%20%20%20%20%20%20.sequence-item%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20width%3A%2050px%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20height%3A%2050px%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20font-size%3A%202rem%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%20%20%20%20%0A%20%20%20%20%20%20%20%20%20%20%20%20.input-btn%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20width%3A%2050px%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20height%3A%2050px%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20font-size%3A%201.2rem%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%7D%0A%0A%20%20%20%20%20%20%20%20%40media%20%28max-width%3A%20480px%29%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20.menu-grid%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20grid-template-columns%3A%201fr%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%20%20%20%20%0A%20%20%20%20%20%20%20%20%20%20%20%20.sequence-item%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20width%3A%2040px%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20height%3A%2040px%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20font-size%3A%201.5rem%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%20%20%20%20%0A%20%20%20%20%20%20%20%20%20%20%20%20.input-btn%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20width%3A%2045px%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20height%3A%2045px%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20font-size%3A%201.1rem%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%20%20%20%20%0A%20%20%20%20%20%20%20%20%20%20%20%20.game-header%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20font-size%3A%201.2rem%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%3C/style%3E%0A%3C/head%3E%0A%3Cbody%3E%0A%20%20%20%20%3C!--%20Background%20Image%20--%3E%0A%20%20%20%20%3Cdiv%20class%3D%22background-image%22%3E%3C/div%3E%0A%0A%20%20%20%20%3C!--%20Header%20--%3E%0A%20%20%20%20%3Cheader%20class%3D%22header%22%3E%0A%20%20%20%20%20%20%20%20%3Cdiv%20class%3D%22logo%22%3EJOKER%20HACKER%20-%20TESTE%20DE%20INVAS%C3%83O%3C/div%3E%0A%20%20%20%20%3C/header%3E%0A%0A%20%20%20%20%3C!--%20HUD%20--%3E%0A%20%20%20%20%3Cdiv%20class%3D%22hud%22%3E%0A%20%20%20%20%20%20%20%20%3Cdiv%20class%3D%22hud-item%22%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%3Ci%20class%3D%22fas%20fa-user-secret%22%3E%3C/i%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%3Cspan%3EReputa%C3%A7%C3%A3o%3A%20%3Cspan%20id%3D%22reputation%22%3E100%3C/span%3E%3C/span%3E%0A%20%20%20%20%20%20%20%20%3C/div%3E%0A%20%20%20%20%20%20%20%20%3Cdiv%20class%3D%22hud-item%22%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%3Ci%20class%3D%22fas%20fa-coins%22%3E%3C/i%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%3Cspan%3EBits%3A%20%3Cspan%20id%3D%22bits%22%3E500%3C/span%3E%3C/span%3E%0A%20%20%20%20%20%20%20%20%3C/div%3E%0A%20%20%20%20%20%20%20%20%3Cdiv%20class%3D%22hud-item%22%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%3Ci%20class%3D%22fas%20fa-microchip%22%3E%3C/i%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%3Cspan%3EN%C3%ADvel%3A%20%3Cspan%20id%3D%22level%22%3E1%3C/span%3E%3C/span%3E%0A%20%20%20%20%20%20%20%20%3C/div%3E%0A%20%20%20%20%20%20%20%20%3Cdiv%20class%3D%22hud-item%22%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%3Ci%20class%3D%22fas%20fa-battery-three-quarters%22%3E%3C/i%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%3Cspan%3EEnergia%3A%3C/span%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%3Cdiv%20class%3D%22progress-container%22%20style%3D%22width%3A%2080px%3B%22%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cdiv%20class%3D%22progress-bar%22%20id%3D%22energy-bar%22%20style%3D%22width%3A%2080%25%3B%22%3E%3C/div%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%3C/div%3E%0A%20%20%20%20%20%20%20%20%3C/div%3E%0A%20%20%20%20%3C/div%3E%0A%0A%20%20%20%20%3C!--%20Main%20Content%20--%3E%0A%20%20%20%20%3Cdiv%20class%3D%22main-content%22%3E%0A%20%20%20%20%20%20%20%20%3C!--%20Menu%20Section%20--%3E%0A%20%20%20%20%20%20%20%20%3Cdiv%20id%3D%22menu-section%22%20class%3D%22section%20active%22%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%3Cdiv%20class%3D%22menu-grid%22%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cdiv%20class%3D%22menu-item%22%20onclick%3D%22showSection%28'invasao'%29%22%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cdiv%20class%3D%22menu-icon%22%3E%3Ci%20class%3D%22fas%20fa-brain%22%3E%3C/i%3E%3C/div%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cdiv%20class%3D%22menu-title%22%3ETESTE%20DE%20INVAS%C3%83O%3C/div%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cdiv%3EProtocolo%20Mental%3C/div%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3C/div%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cdiv%20class%3D%22menu-item%22%20onclick%3D%22showSection%28'missions'%29%22%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cdiv%20class%3D%22menu-icon%22%3E%3Ci%20class%3D%22fas%20fa-bullseye%22%3E%3C/i%3E%3C/div%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cdiv%20class%3D%22menu-title%22%3EMISS%C3%95ES%3C/div%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cdiv%3EInvas%C3%B5es%3C/div%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3C/div%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cdiv%20class%3D%22menu-item%22%20onclick%3D%22showSection%28'shop'%29%22%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cdiv%20class%3D%22menu-icon%22%3E%3Ci%20class%3D%22fas%20fa-shopping-cart%22%3E%3C/i%3E%3C/div%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cdiv%20class%3D%22menu-title%22%3ELOJA%3C/div%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cdiv%3EUpgrades%3C/div%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3C/div%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cdiv%20class%3D%22menu-item%22%20onclick%3D%22showSection%28'profile'%29%22%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cdiv%20class%3D%22menu-icon%22%3E%3Ci%20class%3D%22fas%20fa-user%22%3E%3C/i%3E%3C/div%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cdiv%20class%3D%22menu-title%22%3EPERFIL%3C/div%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cdiv%3EStatus%3C/div%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3C/div%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%3C/div%3E%0A%20%20%20%20%20%20%20%20%3C/div%3E%0A%0A%20%20%20%20%20%20%20%20%3C!--%20Invasao%20Section%20--%3E%0A%20%20%20%20%20%20%20%20%3Cdiv%20id%3D%22invasao-section%22%20class%3D%22section%22%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%3Cdiv%20class%3D%22game-board%22%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cdiv%20class%3D%22game-header%22%3ETESTE%20DE%20INVAS%C3%83O%20-%20PROTOCOLO%20MENTAL%3C/div%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cdiv%20class%3D%22invasao-game%22%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cdiv%20class%3D%22level-indicator%22%3EN%C3%ADvel%3A%20%3Cspan%20id%3D%22invasao-level%22%3E1%3C/span%3E%20%7C%20Sequ%C3%AAncia%3A%20%3Cspan%20id%3D%22sequence-length%22%3E3%3C/span%3E%20s%C3%ADmbolos%3C/div%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cdiv%20class%3D%22sequence-display%22%20id%3D%22sequence-display%22%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cdiv%20class%3D%22sequence-item%22%3E%3F%3C/div%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cdiv%20class%3D%22sequence-item%22%3E%3F%3C/div%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cdiv%20class%3D%22sequence-item%22%3E%3F%3C/div%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3C/div%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cdiv%20class%3D%22game-status%22%20id%3D%22game-status%22%3EToque%20em%20INICIAR%20para%20come%C3%A7ar%3C/div%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cdiv%20class%3D%22user-input%22%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cbutton%20class%3D%22input-btn%22%20onclick%3D%22selectSymbol%28'%E2%96%B2'%29%22%3E%E2%96%B2%3C/button%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cbutton%20class%3D%22input-btn%22%20onclick%3D%22selectSymbol%28'%E2%97%8F'%29%22%3E%E2%97%8F%3C/button%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cbutton%20class%3D%22input-btn%22%20onclick%3D%22selectSymbol%28'%E2%96%A0'%29%22%3E%E2%96%A0%3C/button%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cbutton%20class%3D%22input-btn%22%20onclick%3D%22selectSymbol%28'%E2%99%A6'%29%22%3E%E2%99%A6%3C/button%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3C/div%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cbutton%20class%3D%22btn%20btn-primary%22%20onclick%3D%22startInvasao%28%29%22%20id%3D%22start-invasao-btn%22%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Ci%20class%3D%22fas%20fa-play%22%3E%3C/i%3E%20INICIAR%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3C/button%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cbutton%20class%3D%22btn%22%20onclick%3D%22resetInvasao%28%29%22%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Ci%20class%3D%22fas%20fa-redo%22%3E%3C/i%3E%20REINICIAR%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3C/button%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3C/div%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%3C/div%3E%0A%20%20%20%20%20%20%20%20%3C/div%3E%0A%0A%20%20%20%20%20%20%20%20%3C!--%20Missions%20Section%20--%3E%0A%20%20%20%20%20%20%20%20%3Cdiv%20id%3D%22missions-section%22%20class%3D%22section%22%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%3Cdiv%20class%3D%22game-board%22%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cdiv%20class%3D%22game-header%22%3EMISS%C3%95ES%20DE%20INVAS%C3%83O%3C/div%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cdiv%20style%3D%22text-align%3A%20center%3B%20padding%3A%202rem%3B%22%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Ci%20class%3D%22fas%20fa-lock%22%20style%3D%22font-size%3A%203rem%3B%20color%3A%20var%28--joker-purple%29%3B%20margin-bottom%3A%201rem%3B%22%3E%3C/i%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cp%3EComplete%20o%20teste%20de%20invas%C3%A3o%20para%20desbloquear%20miss%C3%B5es%21%3C/p%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cbutton%20class%3D%22btn%22%20onclick%3D%22showSection%28'invasao'%29%22%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Ci%20class%3D%22fas%20fa-brain%22%3E%3C/i%3E%20IR%20PARA%20TESTE%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3C/button%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3C/div%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%3C/div%3E%0A%20%20%20%20%20%20%20%20%3C/div%3E%0A%0A%20%20%20%20%20%20%20%20%3C!--%20Shop%20Section%20--%3E%0A%20%20%20%20%20%20%20%20%3Cdiv%20id%3D%22shop-section%22%20class%3D%22section%22%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%3Cdiv%20class%3D%22game-board%22%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cdiv%20class%3D%22game-header%22%3ELOJA%20DE%20UPGRADES%3C/div%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cdiv%20style%3D%22text-align%3A%20center%3B%20padding%3A%202rem%3B%22%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Ci%20class%3D%22fas%20fa-store%22%20style%3D%22font-size%3A%203rem%3B%20color%3A%20var%28--joker-purple%29%3B%20margin-bottom%3A%201rem%3B%22%3E%3C/i%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cp%3EGanhe%20bits%20completando%20miss%C3%B5es%20e%20testes%21%3C/p%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cbutton%20class%3D%22btn%22%20onclick%3D%22showSection%28'invasao'%29%22%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Ci%20class%3D%22fas%20fa-brain%22%3E%3C/i%3E%20FAZER%20TESTE%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3C/button%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3C/div%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%3C/div%3E%0A%20%20%20%20%20%20%20%20%3C/div%3E%0A%0A%20%20%20%20%20%20%20%20%3C!--%20Profile%20Section%20--%3E%0A%20%20%20%20%20%20%20%20%3Cdiv%20id%3D%22profile-section%22%20class%3D%22section%22%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%3Cdiv%20class%3D%22game-board%22%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cdiv%20class%3D%22game-header%22%3EPERFIL%20DO%20CORINGA%3C/div%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cdiv%20style%3D%22display%3A%20flex%3B%20flex-wrap%3A%20wrap%3B%20gap%3A%201.5rem%3B%22%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cdiv%20style%3D%22flex%3A%201%3B%20min-width%3A%20250px%3B%22%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Ch3%20style%3D%22color%3A%20var%28--joker-purple%29%3B%20margin-bottom%3A%201rem%3B%22%3EHABILIDADES%3C/h3%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cdiv%20style%3D%22margin-bottom%3A%201rem%3B%22%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cdiv%3EVelocidade%3A%20%3Cspan%20id%3D%22speed-level%22%3E1%3C/span%3E/10%3C/div%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cdiv%20class%3D%22progress-container%22%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cdiv%20class%3D%22progress-bar%22%20id%3D%22speed-bar%22%20style%3D%22width%3A%2010%25%3B%22%3E%3C/div%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3C/div%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3C/div%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cdiv%20style%3D%22margin-bottom%3A%201rem%3B%22%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cdiv%3EL%C3%B3gica%3A%20%3Cspan%20id%3D%22logic-level%22%3E1%3C/span%3E/10%3C/div%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cdiv%20class%3D%22progress-container%22%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cdiv%20class%3D%22progress-bar%22%20id%3D%22logic-bar%22%20style%3D%22width%3A%2010%25%3B%22%3E%3C/div%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3C/div%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3C/div%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cdiv%20style%3D%22margin-bottom%3A%201rem%3B%22%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cdiv%3EMem%C3%B3ria%3A%20%3Cspan%20id%3D%22memory-level%22%3E1%3C/span%3E/10%3C/div%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cdiv%20class%3D%22progress-container%22%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cdiv%20class%3D%22progress-bar%22%20id%3D%22memory-bar%22%20style%3D%22width%3A%2010%25%3B%22%3E%3C/div%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3C/div%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3C/div%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3C/div%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cdiv%20style%3D%22flex%3A%201%3B%20min-width%3A%20250px%3B%22%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Ch3%20style%3D%22color%3A%20var%28--joker-purple%29%3B%20margin-bottom%3A%201rem%3B%22%3ECONQUISTAS%3C/h3%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cdiv%20id%3D%22achievements%22%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cdiv%20style%3D%22padding%3A%200.5rem%3B%20border-bottom%3A%201px%20solid%20var%28--joker-purple%29%3B%22%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Ci%20class%3D%22fas%20fa-trophy%22%3E%3C/i%3E%20Primeiro%20Teste%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3C/div%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3C/div%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3C/div%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3C/div%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%3C/div%3E%0A%20%20%20%20%20%20%20%20%3C/div%3E%0A%20%20%20%20%3C/div%3E%0A%0A%20%20%20%20%3C!--%20Notification%20--%3E%0A%20%20%20%20%3Cdiv%20id%3D%22notification%22%20class%3D%22notification%22%3E%3C/div%3E%0A%0A%20%20%20%20%3Cscript%3E%0A%20%20%20%20%20%20%20%20//%20Initialize%20game%0A%20%20%20%20%20%20%20%20document.addEventListener%28'DOMContentLoaded'%2C%20function%28%29%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20initializeGame%28%29%3B%0A%20%20%20%20%20%20%20%20%7D%29%3B%0A%0A%20%20%20%20%20%20%20%20//%20Game%20State%0A%20%20%20%20%20%20%20%20const%20gameState%20%3D%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20reputation%3A%20100%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20bits%3A%20500%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20level%3A%201%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20energy%3A%2080%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20skills%3A%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20speed%3A%201%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20logic%3A%201%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20memory%3A%201%0A%20%20%20%20%20%20%20%20%20%20%20%20%7D%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20invasao%3A%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20level%3A%201%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20sequenceLength%3A%203%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20currentSequence%3A%20%5B%5D%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20userSequence%3A%20%5B%5D%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20showingSequence%3A%20false%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20activeIndex%3A%20-1%0A%20%20%20%20%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%7D%3B%0A%0A%20%20%20%20%20%20%20%20//%20Initialize%20Game%0A%20%20%20%20%20%20%20%20function%20initializeGame%28%29%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20updateHUD%28%29%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20showNotification%28%22Bem-vindo%20ao%20teste%20de%20invas%C3%A3o%2C%20Coringa%21%22%2C%20%22success%22%29%3B%0A%20%20%20%20%20%20%20%20%7D%0A%0A%20%20%20%20%20%20%20%20//%20Update%20HUD%0A%20%20%20%20%20%20%20%20function%20updateHUD%28%29%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20document.getElementById%28'reputation'%29.textContent%20%3D%20gameState.reputation%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20document.getElementById%28'bits'%29.textContent%20%3D%20gameState.bits%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20document.getElementById%28'level'%29.textContent%20%3D%20gameState.level%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20document.getElementById%28'energy-bar'%29.style.width%20%3D%20gameState.energy%20%2B%20'%25'%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%0A%20%20%20%20%20%20%20%20%20%20%20%20//%20Update%20skill%20bars%0A%20%20%20%20%20%20%20%20%20%20%20%20document.getElementById%28'speed-bar'%29.style.width%20%3D%20%28gameState.skills.speed%20*%2010%29%20%2B%20'%25'%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20document.getElementById%28'logic-bar'%29.style.width%20%3D%20%28gameState.skills.logic%20*%2010%29%20%2B%20'%25'%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20document.getElementById%28'memory-bar'%29.style.width%20%3D%20%28gameState.skills.memory%20*%2010%29%20%2B%20'%25'%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%0A%20%20%20%20%20%20%20%20%20%20%20%20document.getElementById%28'speed-level'%29.textContent%20%3D%20gameState.skills.speed%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20document.getElementById%28'logic-level'%29.textContent%20%3D%20gameState.skills.logic%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20document.getElementById%28'memory-level'%29.textContent%20%3D%20gameState.skills.memory%3B%0A%20%20%20%20%20%20%20%20%7D%0A%0A%20%20%20%20%20%20%20%20//%20Show%20Section%0A%20%20%20%20%20%20%20%20function%20showSection%28sectionId%29%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20//%20Hide%20all%20sections%0A%20%20%20%20%20%20%20%20%20%20%20%20document.querySelectorAll%28'.section'%29.forEach%28section%20%3D%3E%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20section.classList.remove%28'active'%29%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%7D%29%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%0A%20%20%20%20%20%20%20%20%20%20%20%20//%20Show%20selected%20section%0A%20%20%20%20%20%20%20%20%20%20%20%20document.getElementById%28sectionId%20%2B%20'-section'%29.classList.add%28'active'%29%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%0A%20%20%20%20%20%20%20%20%20%20%20%20//%20Update%20HUD%0A%20%20%20%20%20%20%20%20%20%20%20%20updateHUD%28%29%3B%0A%20%20%20%20%20%20%20%20%7D%0A%0A%20%20%20%20%20%20%20%20//%20Invasao%20Game%20Functions%0A%20%20%20%20%20%20%20%20function%20startInvasao%28%29%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20if%20%28gameState.invasao.showingSequence%29%20return%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%0A%20%20%20%20%20%20%20%20%20%20%20%20document.getElementById%28'start-invasao-btn'%29.disabled%20%3D%20true%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20document.getElementById%28'game-status'%29.textContent%20%3D%20%22Memorize%20o%20protocolo%20de%20invas%C3%A3o...%22%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%0A%20%20%20%20%20%20%20%20%20%20%20%20//%20Generate%20new%20sequence%0A%20%20%20%20%20%20%20%20%20%20%20%20gameState.invasao.currentSequence%20%3D%20%5B%5D%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20const%20symbols%20%3D%20%5B'%E2%96%B2'%2C%20'%E2%97%8F'%2C%20'%E2%96%A0'%2C%20'%E2%99%A6'%5D%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%0A%20%20%20%20%20%20%20%20%20%20%20%20for%20%28let%20i%20%3D%200%3B%20i%20%3C%20gameState.invasao.sequenceLength%3B%20i%2B%2B%29%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20const%20randomSymbol%20%3D%20symbols%5BMath.floor%28Math.random%28%29%20*%20symbols.length%29%5D%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20gameState.invasao.currentSequence.push%28randomSymbol%29%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%20%20%20%20%0A%20%20%20%20%20%20%20%20%20%20%20%20//%20Display%20sequence%0A%20%20%20%20%20%20%20%20%20%20%20%20showSequence%28%29%3B%0A%20%20%20%20%20%20%20%20%7D%0A%0A%20%20%20%20%20%20%20%20function%20showSequence%28%29%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20gameState.invasao.showingSequence%20%3D%20true%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20gameState.invasao.userSequence%20%3D%20%5B%5D%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20const%20display%20%3D%20document.getElementById%28'sequence-display'%29%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%0A%20%20%20%20%20%20%20%20%20%20%20%20//%20Clear%20display%0A%20%20%20%20%20%20%20%20%20%20%20%20display.innerHTML%20%3D%20''%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%0A%20%20%20%20%20%20%20%20%20%20%20%20//%20Create%20sequence%20items%0A%20%20%20%20%20%20%20%20%20%20%20%20gameState.invasao.currentSequence.forEach%28%28symbol%2C%20index%29%20%3D%3E%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20const%20item%20%3D%20document.createElement%28'div'%29%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20item.className%20%3D%20'sequence-item'%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20item.textContent%20%3D%20'%3F'%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20item.id%20%3D%20%60seq-item-%24%7Bindex%7D%60%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20display.appendChild%28item%29%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%7D%29%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%0A%20%20%20%20%20%20%20%20%20%20%20%20//%20Show%20symbols%20one%20by%20one%0A%20%20%20%20%20%20%20%20%20%20%20%20let%20i%20%3D%200%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20const%20showInterval%20%3D%20setInterval%28%28%29%20%3D%3E%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20if%20%28i%20%3C%20gameState.invasao.currentSequence.length%29%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20const%20item%20%3D%20document.getElementById%28%60seq-item-%24%7Bi%7D%60%29%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20item.textContent%20%3D%20gameState.invasao.currentSequence%5Bi%5D%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20item.classList.add%28'active'%29%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20setTimeout%28%28%29%20%3D%3E%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20item.classList.remove%28'active'%29%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20i%2B%2B%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%7D%2C%20500%29%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%7D%20else%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20clearInterval%28showInterval%29%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20setTimeout%28%28%29%20%3D%3E%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20//%20Hide%20symbols%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20const%20items%20%3D%20display.querySelectorAll%28'.sequence-item'%29%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20items.forEach%28item%20%3D%3E%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20item.textContent%20%3D%20'%3F'%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%7D%29%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20gameState.invasao.showingSequence%20%3D%20false%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20document.getElementById%28'game-status'%29.textContent%20%3D%20%22Repita%20o%20protocolo%20tocando%20nos%20s%C3%ADmbolos%22%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20document.getElementById%28'start-invasao-btn'%29.disabled%20%3D%20false%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%7D%2C%201000%29%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%20%20%20%20%7D%2C%201000%29%3B%0A%20%20%20%20%20%20%20%20%7D%0A%0A%20%20%20%20%20%20%20%20function%20selectSymbol%28symbol%29%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20if%20%28gameState.invasao.showingSequence%29%20return%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20if%20%28gameState.invasao.userSequence.length%20%3E%3D%20gameState.invasao.currentSequence.length%29%20return%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%0A%20%20%20%20%20%20%20%20%20%20%20%20//%20Add%20to%20user%20sequence%0A%20%20%20%20%20%20%20%20%20%20%20%20gameState.invasao.userSequence.push%28symbol%29%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%0A%20%20%20%20%20%20%20%20%20%20%20%20//%20Update%20display%0A%20%20%20%20%20%20%20%20%20%20%20%20const%20currentIndex%20%3D%20gameState.invasao.userSequence.length%20-%201%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20if%20%28currentIndex%20%3C%20gameState.invasao.sequenceLength%29%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20const%20item%20%3D%20document.getElementById%28%60seq-item-%24%7BcurrentIndex%7D%60%29%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20if%20%28item%29%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20item.textContent%20%3D%20symbol%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20item.classList.add%28'active'%29%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20setTimeout%28%28%29%20%3D%3E%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20item.classList.remove%28'active'%29%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%7D%2C%20300%29%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%20%20%20%20%0A%20%20%20%20%20%20%20%20%20%20%20%20//%20Check%20if%20sequence%20is%20complete%0A%20%20%20%20%20%20%20%20%20%20%20%20if%20%28gameState.invasao.userSequence.length%20%3D%3D%3D%20gameState.invasao.currentSequence.length%29%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20checkSequence%28%29%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%7D%0A%0A%20%20%20%20%20%20%20%20function%20checkSequence%28%29%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20const%20isCorrect%20%3D%20JSON.stringify%28gameState.invasao.userSequence%29%20%3D%3D%3D%20%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20JSON.stringify%28gameState.invasao.currentSequence%29%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%0A%20%20%20%20%20%20%20%20%20%20%20%20if%20%28isCorrect%29%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20document.getElementById%28'game-status'%29.textContent%20%3D%20%22Protocolo%20executado%20com%20sucesso%21%22%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20gameState.invasao.level%2B%2B%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20gameState.invasao.sequenceLength%20%3D%20Math.min%28gameState.invasao.level%20%2B%202%2C%205%29%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20gameState.bits%20%2B%3D%20gameState.invasao.level%20*%2010%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20gameState.reputation%20%2B%3D%205%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20updateHUD%28%29%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20showNotification%28%60N%C3%ADvel%20%24%7BgameState.invasao.level%7D%20completo%21%20%2B%24%7BgameState.invasao.level%20*%2010%7D%20bits%60%2C%20%22success%22%29%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%7D%20else%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20document.getElementById%28'game-status'%29.textContent%20%3D%20%22Falha%20no%20protocolo%21%20Tente%20novamente.%22%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20showNotification%28%22Sequ%C3%AAncia%20incorreta%21%20Tente%20novamente.%22%2C%20%22error%22%29%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%20%20%20%20%0A%20%20%20%20%20%20%20%20%20%20%20%20//%20Update%20level%20display%0A%20%20%20%20%20%20%20%20%20%20%20%20document.getElementById%28'invasao-level'%29.textContent%20%3D%20gameState.invasao.level%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20document.getElementById%28'sequence-length'%29.textContent%20%3D%20gameState.invasao.sequenceLength%3B%0A%20%20%20%20%20%20%20%20%7D%0A%0A%20%20%20%20%20%20%20%20function%20resetInvasao%28%29%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20gameState.invasao.level%20%3D%201%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20gameState.invasao.sequenceLength%20%3D%203%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20gameState.invasao.currentSequence%20%3D%20%5B%5D%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20gameState.invasao.userSequence%20%3D%20%5B%5D%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20gameState.invasao.showingSequence%20%3D%20false%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%0A%20%20%20%20%20%20%20%20%20%20%20%20document.getElementById%28'sequence-display'%29.innerHTML%20%3D%20%60%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cdiv%20class%3D%22sequence-item%22%3E%3F%3C/div%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cdiv%20class%3D%22sequence-item%22%3E%3F%3C/div%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cdiv%20class%3D%22sequence-item%22%3E%3F%3C/div%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%60%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%0A%20%20%20%20%20%20%20%20%20%20%20%20document.getElementById%28'game-status'%29.textContent%20%3D%20%22Toque%20em%20INICIAR%20para%20come%C3%A7ar%22%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20document.getElementById%28'invasao-level'%29.textContent%20%3D%20gameState.invasao.level%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20document.getElementById%28'sequence-length'%29.textContent%20%3D%20gameState.invasao.sequenceLength%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20document.getElementById%28'start-invasao-btn'%29.disabled%20%3D%20false%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%0A%20%20%20%20%20%20%20%20%20%20%20%20showNotification%28%22Teste%20reiniciado%22%2C%20%22info%22%29%3B%0A%20%20%20%20%20%20%20%20%7D%0A%0A%20%20%20%20%20%20%20%20//%20Show%20Notification%0A%20%20%20%20%20%20%20%20function%20showNotification%28message%2C%20type%20%3D%20'info'%29%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20const%20notification%20%3D%20document.getElementById%28'notification'%29%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20notification.textContent%20%3D%20message%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20notification.className%20%3D%20'notification%20show'%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%0A%20%20%20%20%20%20%20%20%20%20%20%20if%20%28type%20%3D%3D%3D%20'success'%29%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20notification.style.borderColor%20%3D%20'%2300ff00'%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20notification.style.color%20%3D%20'%2300ff00'%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%7D%20else%20if%20%28type%20%3D%3D%3D%20'error'%29%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20notification.style.borderColor%20%3D%20'%23ff0000'%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20notification.style.color%20%3D%20'%23ff0000'%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%7D%20else%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20notification.style.borderColor%20%3D%20'%23800080'%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20notification.style.color%20%3D%20'%23800080'%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%20%20%20%20%0A%20%20%20%20%20%20%20%20%20%20%20%20setTimeout%28%28%29%20%3D%3E%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20notification.className%20%3D%20'notification'%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%7D%2C%203000%29%3B%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%3C/script%3E%0A%3C/body%3E%0A%3C/html%3E"
+              width="100%"
+              height="550"
+              frameBorder="0"
+              className="rounded-lg"
+              title="Joker Hacker Game"
+            />
+          </div>
+        </div>
+
+        {/* Description */}
+        <div className="text-center space-y-3">
+          <div className="flex items-center justify-center space-x-2">
+            <Zap className="w-5 h-5 text-joker-purple" />
+            <span 
+              className="text-joker-gold font-bold text-lg"
+              style={{
+                textShadow: '1px 1px 2px rgba(0, 0, 0, 0.8)'
+              }}
+            >
+              Teste sua memória e reflexos!
+            </span>
+          </div>
+          <p 
+            className="text-joker-purple font-gothic text-base"
+            style={{
+              textShadow: '1px 1px 2px rgba(0, 0, 0, 0.9)'
+            }}
+          >
+            Memorize as sequências de símbolos e reproduza-as com precisão.<br />
+            Cada nível aumenta a complexidade do desafio mental.
+          </p>
+        </div>
+
+        {/* Back Button */}
+        <div className="flex justify-center pt-4">
+          <Button
+            variant="outline"
+            onClick={onBack}
+            className="bg-gradient-dark text-joker-gold border-joker-purple hover:border-joker-green transition-colors font-gothic"
+          >
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Voltar aos Jogos
           </Button>
         </div>
-      </div>
+      </CardContent>
     </Card>
   );
 };

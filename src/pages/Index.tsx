@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
@@ -16,6 +15,7 @@ import AIChat from "@/components/AIChat";
 import { aiService } from "@/services/AIService";
 import CasinoGames from "@/components/CasinoGames";
 import CasinoSidebar from "@/components/CasinoSidebar";
+import AIFloatingTips from "@/components/AIFloatingTips";
 
 const Index = () => {
   const [balance, setBalance] = useState(1000);
@@ -112,6 +112,14 @@ const Index = () => {
             />
           </div>
         </div>
+
+        {/* AI Floating Tips */}
+        <AIFloatingTips 
+          playerStats={{
+            balance,
+            gamesPlayed
+          }}
+        />
       </div>
     </div>
   );
