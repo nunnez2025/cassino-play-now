@@ -1,4 +1,3 @@
-
 import { useState, useRef, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -80,11 +79,11 @@ const AIChat = ({ playerStats }: AIChatProps) => {
 
       setMessages(prev => [...prev, aiMessage]);
 
-      // Aprender com a interação
+      // Aprender com a interação - usando 'tie' como resultado neutro para interações de chat
       aiService.learnFromGame({
         gameType: 'chat',
         playerAction: 'message',
-        result: 'interaction',
+        result: 'tie',
         playerBalance: playerStats.balance,
         darkcoins: playerStats.darkcoins,
         timestamp: new Date()
