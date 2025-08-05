@@ -1,4 +1,3 @@
-
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useState } from "react";
 import SlotMachine from "./SlotMachine";
@@ -31,7 +30,13 @@ const CasinoGames = ({ balance, onBalanceChange, playerStats }: CasinoGamesProps
   };
 
   if (showJokerHacker) {
-    return <JokerHacker onBack={handleJokerHackerBack} />;
+    return (
+      <JokerHacker 
+        balance={balance}
+        onBalanceChange={onBalanceChange}
+        onBack={handleJokerHackerBack} 
+      />
+    );
   }
 
   return (
