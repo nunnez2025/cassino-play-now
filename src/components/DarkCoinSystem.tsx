@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -120,7 +119,7 @@ const DarkCoinSystem = ({ balance, onBalanceChange }: DarkCoinSystemProps) => {
     <div className="space-y-4">
       <Card className="bg-gradient-dark border-joker-purple casino-glow">
         <CardHeader className="pb-2">
-          <CardTitle className="text-center text-joker-gold text-lg font-joker neon-text">
+          <CardTitle className="text-center readable-title text-lg font-joker">
             🪙 DARKCOIN VAULT
           </CardTitle>
         </CardHeader>

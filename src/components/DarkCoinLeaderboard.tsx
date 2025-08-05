@@ -1,4 +1,3 @@
-
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Trophy } from "lucide-react";
@@ -23,7 +22,7 @@ const DarkCoinLeaderboard = ({
   return (
     <Card className="bg-gradient-dark border-joker-purple casino-glow">
       <CardHeader className="pb-2">
-        <CardTitle className="text-center text-joker-gold text-sm font-joker neon-text">
+        <CardTitle className="text-center readable-title text-sm font-joker">
           🏆 RANKING DARKCOIN
         </CardTitle>
       </CardHeader>
