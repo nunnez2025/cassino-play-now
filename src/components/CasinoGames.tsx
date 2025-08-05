@@ -1,8 +1,9 @@
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useState } from "react";
 import SlotMachine from "./SlotMachine";
 import Blackjack from "./Blackjack";
-import Roulette from "./Roulette";
+import JokerHacker from "./JokerHacker";
 import JokerGame from "./JokerGame";
 import Arena from "./Arena";
 import AIChat from "./AIChat";
@@ -18,8 +19,23 @@ interface CasinoGamesProps {
 }
 
 const CasinoGames = ({ balance, onBalanceChange, playerStats }: CasinoGamesProps) => {
+  const [activeTab, setActiveTab] = useState("slots");
+  const [showJokerHacker, setShowJokerHacker] = useState(false);
+
+  const handleJokerHackerOpen = () => {
+    setShowJokerHacker(true);
+  };
+
+  const handleJokerHackerBack = () => {
+    setShowJokerHacker(false);
+  };
+
+  if (showJokerHacker) {
+    return <JokerHacker onBack={handleJokerHackerBack} />;
+  }
+
   return (
-    <Tabs defaultValue="slots" className="w-full">
+    <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
       <TabsList className="grid w-full grid-cols-6 bg-gradient-dark border-joker-purple">
         <TabsTrigger 
           value="slots" 
@@ -34,10 +50,10 @@ const CasinoGames = ({ balance, onBalanceChange, playerStats }: CasinoGamesProps
           🎭 Blackjack
         </TabsTrigger>
         <TabsTrigger 
-          value="roulette"
+          value="hacker"
           className="data-[state=active]:bg-gradient-joker data-[state=active]:text-joker-black font-gothic text-xs"
         >
-          🎪 Roleta
+          🎯 Hacker
         </TabsTrigger>
         <TabsTrigger 
           value="jokergame"
@@ -73,11 +89,15 @@ const CasinoGames = ({ balance, onBalanceChange, playerStats }: CasinoGamesProps
         />
       </TabsContent>
       
-      <TabsContent value="roulette" className="mt-6">
-        <Roulette 
-          balance={balance} 
-          onBalanceChange={onBalanceChange}
-        />
+      <TabsContent value="hacker" className="mt-6">
+        <div className="text-center">
+          <button 
+            onClick={handleJokerHackerOpen}
+            className="bg-gradient-to-br from-joker-purple to-joker-purple-dark text-white px-8 py-4 rounded-lg text-xl font-bold hover:shadow-neon transition-all duration-300"
+          >
+            🎯 ABRIR JOKER HACKER
+          </button>
+        </div>
       </TabsContent>
 
       <TabsContent value="jokergame" className="mt-6">
