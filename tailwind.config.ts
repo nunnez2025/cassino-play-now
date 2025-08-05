@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -59,14 +60,14 @@ export default {
 					foreground: 'hsl(var(--card-foreground))'
 				},
 				joker: {
-					purple: 'hsl(var(--joker-purple))',
-					'purple-dark': 'hsl(var(--joker-purple-dark))',
-					green: 'hsl(var(--joker-green))',
-					'green-dark': 'hsl(var(--joker-green-dark))',
-					gold: 'hsl(var(--joker-gold))',
-					'gold-dark': 'hsl(var(--joker-gold-dark))',
-					black: 'hsl(var(--joker-black))',
-					dark: 'hsl(var(--joker-dark))',
+					purple: 'hsl(280 100% 50%)',
+					'purple-dark': 'hsl(280 100% 35%)',
+					green: 'hsl(120 100% 50%)',
+					'green-dark': 'hsl(120 100% 35%)',
+					gold: 'hsl(45 100% 70%)',
+					'gold-dark': 'hsl(45 100% 50%)',
+					black: 'hsl(0 0% 8%)',
+					dark: 'hsl(255 15% 15%)',
 				},
 				sidebar: {
 					DEFAULT: 'hsl(var(--sidebar-background))',
@@ -80,18 +81,18 @@ export default {
 				}
 			},
 			backgroundImage: {
-				'gradient-joker': 'var(--gradient-joker)',
-				'gradient-purple': 'var(--gradient-purple)',
-				'gradient-green': 'var(--gradient-green)',
-				'gradient-gold': 'var(--gradient-gold)',
-				'gradient-dark': 'var(--gradient-dark)',
+				'gradient-joker': 'linear-gradient(135deg, hsl(280 100% 50%) 0%, hsl(280 100% 35%) 100%)',
+				'gradient-purple': 'linear-gradient(135deg, hsl(280 100% 50%) 0%, hsl(280 100% 35%) 100%)',
+				'gradient-green': 'linear-gradient(135deg, hsl(120 100% 50%) 0%, hsl(120 100% 35%) 100%)',
+				'gradient-gold': 'linear-gradient(135deg, hsl(45 100% 70%) 0%, hsl(45 100% 50%) 100%)',
+				'gradient-dark': 'linear-gradient(135deg, hsl(255 15% 15%) 0%, hsl(0 0% 8%) 100%)',
 			},
 			boxShadow: {
-				'joker': 'var(--shadow-joker)',
-				'neon': 'var(--shadow-neon)',
-				'green': 'var(--shadow-green)',
-				'gold': 'var(--shadow-gold)',
-				'glow': 'var(--shadow-glow)',
+				'joker': '0 4px 20px rgba(138, 43, 226, 0.5)',
+				'neon': '0 0 20px hsl(280 100% 50%), 0 0 40px hsl(280 100% 50%)',
+				'green': '0 4px 20px hsl(120 100% 50%), 0 0 30px hsl(120 100% 50%)',
+				'gold': '0 4px 20px hsl(45 100% 70%), 0 0 30px hsl(45 100% 70%)',
+				'glow': '0 0 30px hsl(45 100% 70%), 0 0 50px hsl(280 100% 50%)',
 			},
 			borderRadius: {
 				lg: 'var(--radius)',

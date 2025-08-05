@@ -36,24 +36,31 @@ const CasinoSidebar = ({
         <Button 
           variant="joker" 
           onClick={onAddBonus}
-          className="w-full font-gothic mb-2"
+          className="w-full font-gothic mb-2 text-lg font-bold"
+          style={{
+            textShadow: '1px 1px 0px #000'
+          }}
         >
           🎁 BONUS JOKER 500 FICHAS
         </Button>
       </div>
 
       {/* AI Stats Display */}
-      <div className="bg-gradient-dark border border-joker-purple rounded-lg p-4 neon-glow">
-        <h3 className="text-joker-gold font-bold mb-2 text-center font-joker">🤖 STATUS DA IA</h3>
-        <div className="text-sm text-joker-gold font-gothic space-y-1">
+      <div className="bg-gradient-dark border-2 border-joker-purple rounded-lg p-4 neon-glow">
+        <h3 className="text-white font-bold text-lg mb-3 text-center font-joker" style={{
+          textShadow: '2px 2px 0px #000, 0 0 10px hsl(var(--joker-purple))'
+        }}>🤖 STATUS DA IA</h3>
+        <div className="text-base text-white font-gothic space-y-2" style={{
+          textShadow: '1px 1px 0px #000'
+        }}>
           {(() => {
             const stats = aiService.getAIStats();
             return (
               <>
-                <p><strong>🧠 Jogos Analisados:</strong> {stats.gamesAnalyzed}</p>
-                <p><strong>📊 Padrões Aprendidos:</strong> {stats.patternsLearned}</p>
-                <p><strong>⚡ Nível de Aprendizado:</strong> {(stats.learningLevel * 100).toFixed(1)}%</p>
-                <p><strong>🎯 Taxa de Vitória do Jogador:</strong> {(stats.playerWinRate * 100).toFixed(1)}%</p>
+                <p><strong className="text-joker-gold">🧠 Jogos Analisados:</strong> {stats.gamesAnalyzed}</p>
+                <p><strong className="text-joker-gold">📊 Padrões Aprendidos:</strong> {stats.patternsLearned}</p>
+                <p><strong className="text-joker-gold">⚡ Nível de Aprendizado:</strong> {(stats.learningLevel * 100).toFixed(1)}%</p>
+                <p><strong className="text-joker-gold">🎯 Taxa de Vitória do Jogador:</strong> {(stats.playerWinRate * 100).toFixed(1)}%</p>
               </>
             );
           })()}
@@ -61,27 +68,39 @@ const CasinoSidebar = ({
       </div>
 
       {/* Enhanced Rules */}
-      <div className="bg-gradient-dark border border-joker-purple rounded-lg p-4 neon-glow">
-        <h3 className="text-joker-gold font-bold mb-2 text-center font-joker">🎭 ECONOMIA DARKCOIN</h3>
-        <div className="text-sm text-joker-gold font-gothic space-y-2">
-          <p><strong>🪙 DarkCoin:</strong> Moeda premium do cassino</p>
-          <p><strong>🔥 Queima Mensal:</strong> 10% dos tokens são queimados</p>
-          <p><strong>🏆 Prêmio Mensal:</strong> 5% do lucro da banca para o 1º lugar</p>
-          <p><strong>🤖 IA Adversária:</strong> Aprende com seus padrões de jogo</p>
-          <p><strong>📊 Conversão:</strong> 10 fichas = 1 DarkCoin</p>
-          <p className="text-joker-purple mt-3 font-horror">💰 Domine a economia do caos!</p>
+      <div className="bg-gradient-dark border-2 border-joker-purple rounded-lg p-4 neon-glow">
+        <h3 className="text-white font-bold text-lg mb-3 text-center font-joker" style={{
+          textShadow: '2px 2px 0px #000, 0 0 10px hsl(var(--joker-purple))'
+        }}>🎭 ECONOMIA DARKCOIN</h3>
+        <div className="text-sm text-white font-gothic space-y-2 leading-relaxed" style={{
+          textShadow: '1px 1px 0px #000'
+        }}>
+          <p><strong className="text-joker-gold">🪙 DarkCoin:</strong> Moeda premium do cassino</p>
+          <p><strong className="text-joker-gold">🔥 Queima Mensal:</strong> 10% dos tokens são queimados</p>
+          <p><strong className="text-joker-gold">🏆 Prêmio Mensal:</strong> 5% do lucro da banca para o 1º lugar</p>
+          <p><strong className="text-joker-gold">🤖 IA Adversária:</strong> Aprende com seus padrões de jogo</p>
+          <p><strong className="text-joker-gold">📊 Conversão:</strong> 10 fichas = 1 DarkCoin</p>
+          <p className="text-joker-purple font-bold mt-3 font-horror text-base" style={{
+            textShadow: '2px 2px 0px #000, 0 0 10px hsl(var(--joker-purple))'
+          }}>💰 Domine a economia do caos!</p>
         </div>
       </div>
 
-      <div className="bg-gradient-dark border border-joker-purple rounded-lg p-4 neon-glow">
-        <h3 className="text-joker-gold font-bold mb-2 text-center font-joker">🎭 REGRAS DO JOKER</h3>
-        <div className="text-sm text-joker-gold font-gothic space-y-2">
-          <p><strong>🃏 Joker Slots:</strong> Combine símbolos para ganhar!</p>
-          <p><strong>🎭 Blackjack:</strong> Chegue próximo de 21, Joker vale 15!</p>
-          <p><strong>🎪 Roleta:</strong> Aposte em cores, números ou paridades.</p>
-          <p><strong>🎲 High-Low:</strong> Adivinhe se a carta será maior ou menor!</p>
-          <p><strong>⚔️ Arena:</strong> Escolha um lutador e domine a arena!</p>
-          <p className="text-joker-purple mt-3 font-horror">🃏 Que a loucura traga sorte!</p>
+      <div className="bg-gradient-dark border-2 border-joker-purple rounded-lg p-4 neon-glow">
+        <h3 className="text-white font-bold text-lg mb-3 text-center font-joker" style={{
+          textShadow: '2px 2px 0px #000, 0 0 10px hsl(var(--joker-purple))'
+        }}>🎭 REGRAS DO JOKER</h3>
+        <div className="text-sm text-white font-gothic space-y-2 leading-relaxed" style={{
+          textShadow: '1px 1px 0px #000'
+        }}>
+          <p><strong className="text-joker-gold">🃏 Joker Slots:</strong> Combine símbolos para ganhar!</p>
+          <p><strong className="text-joker-gold">🎭 Blackjack:</strong> Chegue próximo de 21, Joker vale 15!</p>
+          <p><strong className="text-joker-gold">🎪 Roleta:</strong> Aposte em cores, números ou paridades.</p>
+          <p><strong className="text-joker-gold">🎲 High-Low:</strong> Adivinhe se a carta será maior ou menor!</p>
+          <p><strong className="text-joker-gold">⚔️ Arena:</strong> Escolha um lutador e domine a arena!</p>
+          <p className="text-joker-purple font-bold mt-3 font-horror text-base" style={{
+            textShadow: '2px 2px 0px #000, 0 0 10px hsl(var(--joker-purple))'
+          }}>🃏 Que a loucura traga sorte!</p>
         </div>
       </div>
     </div>

@@ -15,23 +15,25 @@ const CasinoHeader = ({ balance }: CasinoHeaderProps) => {
       <div className="container mx-auto flex items-center justify-between">
         <div className="flex items-center space-x-4">
           <img src={jokerLogo} alt="Joker Logo" className="w-16 h-16 floating-animation" />
-          <h1 className="text-4xl font-bold joker-title text-joker-purple" style={{
-            textShadow: '2px 2px 0px white, -2px -2px 0px white, 2px -2px 0px white, -2px 2px 0px white, 0px 2px 0px white, 2px 0px 0px white, 0px -2px 0px white, -2px 0px 0px white',
-            WebkitTextStroke: '1px white'
+          <h1 className="text-4xl font-bold joker-title text-white font-joker" style={{
+            textShadow: '3px 3px 0px #000, -2px -2px 0px #000, 2px -2px 0px #000, -2px 2px 0px #000, 0 0 15px hsl(var(--joker-purple))',
+            WebkitTextStroke: '2px hsl(var(--joker-purple))'
           }}>
             🃏 JOKER'S CASINO
           </h1>
-          <span className="text-sm text-joker-gold font-horror hidden md:block" style={{
-            textShadow: '1px 1px 0px black, -1px -1px 0px black, 1px -1px 0px black, -1px 1px 0px black'
+          <span className="text-base text-white font-bold font-gothic hidden md:block" style={{
+            textShadow: '2px 2px 0px #000, -1px -1px 0px #000, 1px -1px 0px #000, -1px 1px 0px #000, 0 0 10px hsl(var(--joker-gold))'
           }}>
             "Where Chaos Meets Fortune"
           </span>
         </div>
         
-        <Card className="bg-gradient-dark border-joker-gold p-4 shadow-gold">
+        <Card className="bg-gradient-dark border-joker-gold border-2 p-4 shadow-gold">
           <div className="flex items-center space-x-2">
             <img src={jokerChip} alt="Joker Chips" className="w-8 h-8" />
-            <span className="text-joker-gold font-bold text-xl font-gothic">
+            <span className="text-white font-bold text-xl font-gothic" style={{
+              textShadow: '2px 2px 0px #000, 0 0 10px hsl(var(--joker-gold))'
+            }}>
               {balance.toLocaleString()} Fichas
             </span>
           </div>
