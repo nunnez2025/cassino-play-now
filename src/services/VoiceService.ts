@@ -41,7 +41,7 @@ class VoiceService {
       this.recognition = new SpeechRecognition();
       this.recognition.continuous = false;
       this.recognition.interimResults = false;
-      this.recognition.lang = 'pt-BR';
+      this.recognition.lang = 'pt-BR'; // Português brasileiro como padrão
     }
   }
 
@@ -52,26 +52,74 @@ class VoiceService {
   }
 
   getJokerVoice(): SpeechSynthesisVoice | undefined {
-    // Procurar por vozes masculinas dramáticas
+    // Procurar por vozes portuguesas masculinas primeiro
+    const portugueseVoices = this.voices.filter(voice => 
+      voice.lang.includes('pt-BR') || voice.lang.includes('pt')
+    );
+
+    // Procurar vozes masculinas dramáticas em português
+    const dramaticPortugueseVoices = portugueseVoices.filter(voice => 
+      voice.name.toLowerCase().includes('male') || 
+      voice.name.toLowerCase().includes('masculin') ||
+      voice.name.toLowerCase().includes('homem') ||
+      voice.name.toLowerCase().includes('daniel') ||
+      voice.name.toLowerCase().includes('luciano')
+    );
+
+    if (dramaticPortugueseVoices.length > 0) {
+      return dramaticPortugueseVoices[0];
+    }
+
+    // Fallback para qualquer voz portuguesa
+    if (portugueseVoices.length > 0) {
+      return portugueseVoices[0];
+    }
+
+    // Fallback final para inglês se não houver português
     const dramaticVoices = this.voices.filter(voice => 
       (voice.name.toLowerCase().includes('male') || 
        voice.name.toLowerCase().includes('deep') ||
        voice.name.toLowerCase().includes('alex') ||
        voice.name.toLowerCase().includes('daniel')) &&
-      (voice.lang.includes('pt') || voice.lang.includes('en'))
+      voice.lang.includes('en')
     );
+    
     return dramaticVoices[0] || this.voices[0];
   }
 
   getHarlequinVoice(): SpeechSynthesisVoice | undefined {
-    // Procurar por vozes femininas suaves
+    // Procurar por vozes portuguesas femininas primeiro
+    const portugueseVoices = this.voices.filter(voice => 
+      voice.lang.includes('pt-BR') || voice.lang.includes('pt')
+    );
+
+    // Procurar vozes femininas suaves em português
+    const femininePortugueseVoices = portugueseVoices.filter(voice => 
+      voice.name.toLowerCase().includes('female') || 
+      voice.name.toLowerCase().includes('feminin') ||
+      voice.name.toLowerCase().includes('mulher') ||
+      voice.name.toLowerCase().includes('marcia') ||
+      voice.name.toLowerCase().includes('lucia')
+    );
+
+    if (femininePortugueseVoices.length > 0) {
+      return femininePortugueseVoices[0];
+    }
+
+    // Fallback para qualquer voz portuguesa que não seja a primeira (geralmente masculina)
+    if (portugueseVoices.length > 1) {
+      return portugueseVoices[1];
+    }
+
+    // Fallback final para inglês se não houver português
     const feminineVoices = this.voices.filter(voice => 
       (voice.name.toLowerCase().includes('female') || 
        voice.name.toLowerCase().includes('samantha') ||
        voice.name.toLowerCase().includes('alice') ||
        voice.name.toLowerCase().includes('karen')) &&
-      (voice.lang.includes('pt') || voice.lang.includes('en'))
+      voice.lang.includes('en')
     );
+    
     return feminineVoices[0] || this.voices[1] || this.voices[0];
   }
 
@@ -87,7 +135,9 @@ class VoiceService {
 
       const utterance = new SpeechSynthesisUtterance(text);
       
-      utterance.rate = settings.rate || 1.0;
+      // Configurar para português como padrão
+      utterance.lang = 'pt-BR';
+      utterance.rate = settings.rate || 0.9; // Um pouco mais lento para melhor compreensão
       utterance.pitch = settings.pitch || 1.0;
       utterance.volume = settings.volume || 0.8;
       
@@ -106,8 +156,8 @@ class VoiceService {
     const jokerVoice = this.getJokerVoice();
     return this.speak(text, {
       voice: jokerVoice,
-      rate: 0.9,
-      pitch: 0.8,
+      rate: 0.8, // Mais dramático e lento
+      pitch: 0.9, // Um pouco mais grave
       volume: 0.9
     });
   }
@@ -116,8 +166,8 @@ class VoiceService {
     const harlequinVoice = this.getHarlequinVoice();
     return this.speak(text, {
       voice: harlequinVoice,
-      rate: 1.1,
-      pitch: 1.2,
+      rate: 1.0,
+      pitch: 1.1, // Um pouco mais agudo
       volume: 0.8
     });
   }
