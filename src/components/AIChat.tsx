@@ -1,11 +1,13 @@
+
 import { useState, useRef, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useToast } from "@/hooks/use-toast";
-import { Send, Bot, User, Zap, Brain, TrendingUp } from "lucide-react";
+import { Send, Bot, User, Zap, Brain, TrendingUp, ChevronUp, ChevronDown, Minimize2, Maximize2 } from "lucide-react";
 import { aiService } from "@/services/AIService";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 
 interface Message {
   id: string;
@@ -34,6 +36,8 @@ const AIChat = ({ playerStats }: AIChatProps) => {
   const [inputMessage, setInputMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [aiPersonality, setAiPersonality] = useState<'friendly' | 'aggressive' | 'strategic'>('friendly');
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [isMinimized, setIsMinimized] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
 
@@ -168,151 +172,185 @@ const AIChat = ({ playerStats }: AIChatProps) => {
   // Obter estatísticas da IA
   const aiStats = aiService.getAIStats();
 
+  // Se minimizado, mostrar apenas um botão flutuante
+  if (isMinimized) {
+    return (
+      <div className="fixed bottom-4 right-4 z-50">
+        <Button
+          onClick={() => setIsMinimized(false)}
+          className="bg-gradient-joker hover:bg-gradient-joker/90 text-joker-black font-bold rounded-full w-14 h-14 shadow-lg hover:shadow-neon transition-all duration-300"
+        >
+          <Bot className="w-6 h-6" />
+        </Button>
+      </div>
+    );
+  }
+
   return (
-    <Card className="bg-gradient-dark border-joker-purple casino-glow h-full flex flex-col">
-      <CardHeader className="pb-2">
-        <CardTitle className="flex items-center justify-between text-joker-gold font-joker neon-text text-sm">
-          <div className="flex items-center space-x-2">
-            <Bot className="w-4 h-4" />
-            <span>IA CORINGA</span>
-            <span className={`text-base ${getPersonalityColor()}`}>
-              {getAIAvatar()}
-            </span>
+    <div className="relative">
+      <Card className="bg-gradient-dark border-joker-purple casino-glow h-full flex flex-col">
+        <CardHeader className="pb-2">
+          <CardTitle className="flex items-center justify-between text-joker-gold font-joker neon-text text-sm">
+            <div className="flex items-center space-x-2">
+              <Bot className="w-4 h-4" />
+              <span>IA CORINGA</span>
+              <span className={`text-base ${getPersonalityColor()}`}>
+                {getAIAvatar()}
+              </span>
+            </div>
+            <div className="flex items-center space-x-1">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={clearChat}
+                className="text-xs h-6"
+              >
+                Limpar
+              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setIsMinimized(true)}
+                className="text-xs h-6 w-6 p-0"
+              >
+                <Minimize2 className="w-3 h-3" />
+              </Button>
+              <div className={`w-2 h-2 rounded-full ${isLoading ? 'bg-yellow-500 animate-pulse' : 'bg-green-500'}`} />
+            </div>
+          </CardTitle>
+          
+          <Collapsible open={isExpanded} onOpenChange={setIsExpanded}>
+            <div className="flex items-center justify-between">
+              <div className="text-xs text-joker-purple font-gothic">
+                <span>Modo: {getPersonalityName()}</span>
+              </div>
+              <CollapsibleTrigger asChild>
+                <Button variant="ghost" size="sm" className="text-xs h-6 w-6 p-0">
+                  {isExpanded ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
+                </Button>
+              </CollapsibleTrigger>
+            </div>
+            
+            <CollapsibleContent className="space-y-2">
+              <div className="bg-gradient-dark border border-joker-purple rounded p-2">
+                <div className="grid grid-cols-2 gap-2 text-xs text-joker-gold">
+                  <div className="flex items-center space-x-1">
+                    <Brain className="w-3 h-3" />
+                    <span>Nível: {(aiStats.learningLevel * 100).toFixed(0)}%</span>
+                  </div>
+                  <div className="flex items-center space-x-1">
+                    <TrendingUp className="w-3 h-3" />
+                    <span>Win Rate: {(aiStats.playerWinRate * 100).toFixed(1)}%</span>
+                  </div>
+                  <div className="text-xs text-joker-purple col-span-2">
+                    🧠 {aiStats.gamesAnalyzed} jogos | Favorito: {aiStats.favoriteGame || 'Analisando...'}
+                  </div>
+                </div>
+              </div>
+            </CollapsibleContent>
+          </Collapsible>
+        </CardHeader>
+
+        <CardContent className="flex-1 flex flex-col space-y-3 min-h-0">
+          <ScrollArea className="flex-1 pr-2 max-h-60">
+            <div className="space-y-3">
+              {messages.map((message) => (
+                <div
+                  key={message.id}
+                  className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
+                >
+                  <div
+                    className={`max-w-[85%] p-2 rounded text-sm ${
+                      message.sender === 'user'
+                        ? 'bg-gradient-joker text-joker-black'
+                        : 'bg-gradient-dark border border-joker-purple text-joker-gold'
+                    }`}
+                  >
+                    <div className="flex items-start space-x-2">
+                      <div className={`text-base ${message.sender === 'user' ? 'text-joker-black' : getPersonalityColor()}`}>
+                        {message.sender === 'user' ? '👤' : getAIAvatar()}
+                      </div>
+                      <div className="flex-1">
+                        <p className="font-gothic leading-relaxed">{message.content}</p>
+                        <p className={`text-xs mt-1 opacity-60 ${
+                          message.sender === 'user' ? 'text-joker-black' : 'text-joker-purple'
+                        }`}>
+                          {message.timestamp.toLocaleTimeString('pt-BR', { 
+                            hour: '2-digit', 
+                            minute: '2-digit' 
+                          })}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+              {isLoading && (
+                <div className="flex justify-start">
+                  <div className="bg-gradient-dark border border-joker-purple text-joker-gold p-2 rounded">
+                    <div className="flex items-center space-x-2">
+                      <div className={getPersonalityColor()}>{getAIAvatar()}</div>
+                      <div className="flex space-x-1">
+                        <div className="w-2 h-2 bg-joker-purple rounded-full animate-bounce" />
+                        <div className="w-2 h-2 bg-joker-purple rounded-full animate-bounce" style={{ animationDelay: '0.1s' }} />
+                        <div className="w-2 h-2 bg-joker-purple rounded-full animate-bounce" style={{ animationDelay: '0.2s' }} />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+            <div ref={messagesEndRef} />
+          </ScrollArea>
+
+          <div className="flex space-x-2">
+            <Input
+              value={inputMessage}
+              onChange={(e) => setInputMessage(e.target.value)}
+              placeholder="Converse com a IA..."
+              onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
+              disabled={isLoading}
+              className="flex-1 bg-joker-dark border-joker-purple text-joker-gold font-gothic text-sm"
+            />
+            <Button
+              variant="joker"
+              onClick={sendMessage}
+              disabled={isLoading || !inputMessage.trim()}
+              className="px-3"
+            >
+              <Send className="w-3 h-3" />
+            </Button>
           </div>
-          <div className="flex items-center space-x-1">
+
+          <div className="grid grid-cols-3 gap-1">
             <Button
               variant="outline"
               size="sm"
-              onClick={clearChat}
+              onClick={() => setInputMessage("Qual minha melhor estratégia?")}
               className="text-xs h-6"
             >
-              Limpar
+              📊 Análise
             </Button>
-            <div className={`w-2 h-2 rounded-full ${isLoading ? 'bg-yellow-500 animate-pulse' : 'bg-green-500'}`} />
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setInputMessage("Me desafie em um jogo!")}
+              className="text-xs h-6"
+            >
+              ⚔️ Desafio
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setInputMessage("Como ganhar DarkCoins?")}
+              className="text-xs h-6"
+            >
+              🪙 Dicas
+            </Button>
           </div>
-        </CardTitle>
-        <div className="text-xs text-joker-purple font-gothic flex justify-between">
-          <span>Modo: {getPersonalityName()}</span>
-          <span>🧠 {aiStats.gamesAnalyzed} jogos aprendidos</span>
-        </div>
-      </CardHeader>
-
-      <CardContent className="flex-1 flex flex-col space-y-3 min-h-0">
-        {/* AI Stats Display */}
-        <div className="bg-gradient-dark border border-joker-purple rounded p-2">
-          <div className="grid grid-cols-2 gap-2 text-xs text-joker-gold">
-            <div className="flex items-center space-x-1">
-              <Brain className="w-3 h-3" />
-              <span>Nível: {(aiStats.learningLevel * 100).toFixed(0)}%</span>
-            </div>
-            <div className="flex items-center space-x-1">
-              <TrendingUp className="w-3 h-3" />
-              <span>Win Rate: {(aiStats.playerWinRate * 100).toFixed(1)}%</span>
-            </div>
-            <div className="text-xs text-joker-purple col-span-2">
-              Jogo Favorito: {aiStats.favoriteGame || 'Analisando...'}
-            </div>
-          </div>
-        </div>
-
-        <ScrollArea className="flex-1 pr-2">
-          <div className="space-y-3">
-            {messages.map((message) => (
-              <div
-                key={message.id}
-                className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
-              >
-                <div
-                  className={`max-w-[85%] p-2 rounded text-sm ${
-                    message.sender === 'user'
-                      ? 'bg-gradient-joker text-joker-black'
-                      : 'bg-gradient-dark border border-joker-purple text-joker-gold'
-                  }`}
-                >
-                  <div className="flex items-start space-x-2">
-                    <div className={`text-base ${message.sender === 'user' ? 'text-joker-black' : getPersonalityColor()}`}>
-                      {message.sender === 'user' ? '👤' : getAIAvatar()}
-                    </div>
-                    <div className="flex-1">
-                      <p className="font-gothic leading-relaxed">{message.content}</p>
-                      <p className={`text-xs mt-1 opacity-60 ${
-                        message.sender === 'user' ? 'text-joker-black' : 'text-joker-purple'
-                      }`}>
-                        {message.timestamp.toLocaleTimeString('pt-BR', { 
-                          hour: '2-digit', 
-                          minute: '2-digit' 
-                        })}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))}
-            {isLoading && (
-              <div className="flex justify-start">
-                <div className="bg-gradient-dark border border-joker-purple text-joker-gold p-2 rounded">
-                  <div className="flex items-center space-x-2">
-                    <div className={getPersonalityColor()}>{getAIAvatar()}</div>
-                    <div className="flex space-x-1">
-                      <div className="w-2 h-2 bg-joker-purple rounded-full animate-bounce" />
-                      <div className="w-2 h-2 bg-joker-purple rounded-full animate-bounce" style={{ animationDelay: '0.1s' }} />
-                      <div className="w-2 h-2 bg-joker-purple rounded-full animate-bounce" style={{ animationDelay: '0.2s' }} />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-          <div ref={messagesEndRef} />
-        </ScrollArea>
-
-        <div className="flex space-x-2">
-          <Input
-            value={inputMessage}
-            onChange={(e) => setInputMessage(e.target.value)}
-            placeholder="Converse com a IA..."
-            onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
-            disabled={isLoading}
-            className="flex-1 bg-joker-dark border-joker-purple text-joker-gold font-gothic text-sm"
-          />
-          <Button
-            variant="joker"
-            onClick={sendMessage}
-            disabled={isLoading || !inputMessage.trim()}
-            className="px-3"
-          >
-            <Send className="w-3 h-3" />
-          </Button>
-        </div>
-
-        <div className="grid grid-cols-3 gap-1">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setInputMessage("Qual minha melhor estratégia?")}
-            className="text-xs h-6"
-          >
-            📊 Análise
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setInputMessage("Me desafie em um jogo!")}
-            className="text-xs h-6"
-          >
-            ⚔️ Desafio
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setInputMessage("Como ganhar DarkCoins?")}
-            className="text-xs h-6"
-          >
-            🪙 Dicas
-          </Button>
-        </div>
-      </CardContent>
-    </Card>
+        </CardContent>
+      </Card>
+    </div>
   );
 };
 
