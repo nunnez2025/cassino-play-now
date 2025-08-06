@@ -2,7 +2,6 @@
 import { DarkCoinSystemData, Player } from '@/types/game';
 
 export class DarkCoinEconomy {
-  private readonly BURN_RATE = 0.10; // 10%
   private readonly HOUSE_PRIZE_RATE = 0.05; // 5%
   private readonly CONVERSION_RATE = 10; // 10 chips = 1 darkcoin
 
@@ -68,35 +67,6 @@ export class DarkCoinEconomy {
 
   convertChipsToDarkcoins(chips: number): number {
     return Math.floor(chips / this.CONVERSION_RATE);
-  }
-
-  executeBurn(data: DarkCoinSystemData): { burnAmount: number, playerBurnAmount: number } {
-    const totalBurnAmount = Math.floor(data.totalSupply * this.BURN_RATE);
-    const playerBurnAmount = Math.floor((data.playerDarkcoins / data.totalSupply) * totalBurnAmount);
-    
-    // Update system data
-    data.playerDarkcoins = Math.max(0, data.playerDarkcoins - playerBurnAmount);
-    data.totalSupply -= totalBurnAmount;
-    data.houseProfit += totalBurnAmount * 5; // Casa ganha 5x o valor queimado
-    data.lastBurnDate = new Date().toISOString();
-    
-    // Atualizar leaderboard proporcionalmente
-    data.players = data.players.map(player => {
-      if (player.id === 'player') {
-        return { ...player, darkcoins: Math.max(0, data.playerDarkcoins) };
-      } else {
-        const playerBurn = Math.floor((player.darkcoins / data.totalSupply) * totalBurnAmount);
-        return { ...player, darkcoins: Math.max(0, player.darkcoins - playerBurn) };
-      }
-    }).sort((a, b) => b.darkcoins - a.darkcoins)
-     .map((player, index) => ({ ...player, rank: index + 1 }));
-
-    data.burnHistory.push({
-      date: new Date().toISOString(),
-      amount: totalBurnAmount
-    });
-
-    return { burnAmount: totalBurnAmount, playerBurnAmount };
   }
 
   calculateMonthlyPrize(houseProfit: number): number {

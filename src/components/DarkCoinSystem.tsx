@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -57,23 +58,8 @@ const DarkCoinSystem = ({ balance, onBalanceChange }: DarkCoinSystemProps) => {
     setIsLoading(false);
   };
 
-  const simulateBurn = () => {
-    if (isLoading) return;
-    
-    setIsLoading(true);
-    
-    const newSystemData = { ...systemData };
-    const { burnAmount, playerBurnAmount } = darkCoinEconomy.executeBurn(newSystemData);
-    
-    setSystemData(newSystemData);
-
-    toast({
-      title: "🔥 Queima Mensal Executada!",
-      description: `${burnAmount.toLocaleString()} DarkCoins foram queimados do supply total! Você perdeu ${playerBurnAmount} tokens.`,
-      variant: "destructive",
-    });
-    
-    setIsLoading(false);
+  const openShadowVision = () => {
+    window.open('https://shadow-cloned-vision.vercel.app/', '_blank');
   };
 
   const claimMonthlyPrize = () => {
@@ -148,11 +134,10 @@ const DarkCoinSystem = ({ balance, onBalanceChange }: DarkCoinSystemProps) => {
             </Button>
             <Button
               variant="bet"
-              onClick={simulateBurn}
-              disabled={isLoading}
+              onClick={openShadowVision}
               className="w-full text-xs"
             >
-              🔥 {isLoading ? 'Queimando...' : 'Simular Queima Mensal'}
+              👁️ Shadow Vision
             </Button>
           </div>
         </CardContent>
