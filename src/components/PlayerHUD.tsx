@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -124,11 +125,11 @@ const PlayerHUD = ({ balance, gamesPlayed, darkcoins }: PlayerHUDProps) => {
     );
   }
 
-  // Interface expandida com layout corrigido
+  // Interface expandida
   return (
-    <div className="fixed top-4 right-4 z-40 space-y-3 max-w-xs">
+    <div className="fixed top-4 right-4 z-40 space-y-2 max-w-sm">
       {/* Botão de fechar */}
-      <div className="flex justify-end">
+      <div className="flex justify-end mb-2">
         <Button
           onClick={() => setIsExpanded(false)}
           className="bg-gradient-dark border-joker-purple casino-glow p-1 h-8"
@@ -139,58 +140,41 @@ const PlayerHUD = ({ balance, gamesPlayed, darkcoins }: PlayerHUDProps) => {
         </Button>
       </div>
 
-      {/* Status Principal - Layout em grid 2x2 */}
+      {/* Status Principal */}
       <Card className="bg-gradient-dark border-joker-purple casino-glow">
-        <CardContent className="p-4">
-          <div className="grid grid-cols-2 gap-3 text-sm">
-            {/* Primeira linha */}
-            <div className="flex items-center space-x-2">
-              <Coins className="w-4 h-4 text-joker-gold flex-shrink-0" />
-              <div className="flex flex-col min-w-0">
-                <span className="text-joker-gold font-bold text-xs">Fichas</span>
-                <span className="text-joker-gold font-bold truncate">{balance.toLocaleString()}</span>
-              </div>
+        <CardContent className="p-3">
+          <div className="grid grid-cols-2 gap-2 text-xs">
+            <div className="flex items-center space-x-1">
+              <Coins className="w-3 h-3 text-joker-gold" />
+              <span className="text-joker-gold font-bold">{balance.toLocaleString()}</span>
             </div>
-            
-            <div className="flex items-center space-x-2">
-              <div className="w-4 h-4 rounded-full bg-joker-purple flex-shrink-0" />
-              <div className="flex flex-col min-w-0">
-                <span className="text-joker-purple font-bold text-xs">DarkCoins</span>
-                <span className="text-joker-purple font-bold truncate">{darkcoins.toLocaleString()}</span>
-              </div>
+            <div className="flex items-center space-x-1">
+              <div className="w-3 h-3 rounded-full bg-joker-purple" />
+              <span className="text-joker-purple font-bold">{darkcoins.toLocaleString()} DC</span>
             </div>
-            
-            {/* Segunda linha */}
-            <div className="flex items-center space-x-2">
-              <Calendar className="w-4 h-4 text-joker-gold flex-shrink-0" />
-              <div className="flex flex-col min-w-0">
-                <span className="text-joker-gold text-xs">Jogos</span>
-                <span className="text-joker-gold font-bold">{gamesPlayed}</span>
-              </div>
+            <div className="flex items-center space-x-1">
+              <Calendar className="w-3 h-3 text-joker-gold" />
+              <span className="text-joker-gold text-xs">{gamesPlayed} jogos</span>
             </div>
-            
-            <div className="flex items-center space-x-2">
-              <TrendingDown className="w-4 h-4 text-red-400 flex-shrink-0" />
-              <div className="flex flex-col min-w-0">
-                <span className="text-red-400 text-xs">Perda</span>
-                <span className="text-red-400 font-bold">
-                  -{economicProfile.monthlyData.totalLoss.toFixed(0)}
-                </span>
-              </div>
+            <div className="flex items-center space-x-1">
+              <TrendingDown className="w-3 h-3 text-red-400" />
+              <span className="text-red-400 text-xs">
+                -{economicProfile.monthlyData.totalLoss.toFixed(0)}
+              </span>
             </div>
           </div>
           
           {/* Progresso do Ciclo */}
-          <div className="mt-4 pt-3 border-t border-joker-purple/30">
-            <div className="flex justify-between items-center mb-2">
+          <div className="mt-2">
+            <div className="flex justify-between items-center mb-1">
               <span className="text-xs text-joker-purple">Ciclo 30 dias</span>
               <span className="text-xs text-joker-gold">{cycleProgress} dias restantes</span>
             </div>
             <Progress 
               value={progressPercentage} 
-              className="h-2 bg-joker-dark" 
+              className="h-1.5 bg-joker-dark" 
             />
-            <div className="flex justify-between items-center mt-2">
+            <div className="flex justify-between items-center mt-1">
               <span className="text-xs text-red-400">
                 Perdido: {economicProfile.monthlyData.totalLoss.toFixed(0)}
               </span>
@@ -204,16 +188,16 @@ const PlayerHUD = ({ balance, gamesPlayed, darkcoins }: PlayerHUDProps) => {
 
       {/* Controles de Voz */}
       <Card className="bg-gradient-dark border-joker-purple casino-glow">
-        <CardContent className="p-3">
-          <div className="flex justify-between items-center gap-2">
+        <CardContent className="p-2">
+          <div className="flex justify-between items-center">
             <Button
               variant="outline"
               size="sm"
               onClick={speakQuote}
               disabled={isSpeaking || !quote}
-              className="text-xs h-8 flex-1"
+              className="text-xs h-7"
             >
-              {isSpeaking ? <VolumeX className="w-3 h-3 mr-1" /> : <Volume2 className="w-3 h-3 mr-1" />}
+              {isSpeaking ? <VolumeX className="w-3 h-3" /> : <Volume2 className="w-3 h-3" />}
               Joker
             </Button>
             
@@ -222,9 +206,9 @@ const PlayerHUD = ({ balance, gamesPlayed, darkcoins }: PlayerHUDProps) => {
               size="sm"
               onClick={startListening}
               disabled={isListening}
-              className="text-xs h-8 flex-1"
+              className="text-xs h-7"
             >
-              {isListening ? <MicOff className="w-3 h-3 mr-1" /> : <Mic className="w-3 h-3 mr-1" />}
+              {isListening ? <MicOff className="w-3 h-3" /> : <Mic className="w-3 h-3" />}
               Falar
             </Button>
           </div>
@@ -233,31 +217,21 @@ const PlayerHUD = ({ balance, gamesPlayed, darkcoins }: PlayerHUDProps) => {
 
       {/* Informações Contextuais */}
       <Card className="bg-gradient-dark border-joker-purple casino-glow">
-        <CardContent className="p-3">
-          <div className="space-y-2 text-xs">
+        <CardContent className="p-2">
+          <div className="space-y-1 text-xs">
             {location && (
-              <div className="text-joker-gold flex items-center">
-                <span className="mr-1">📍</span>
-                <span className="truncate">{location.city}, {location.region}</span>
+              <div className="text-joker-gold">
+                📍 {location.city}, {location.region}
               </div>
             )}
             {weather && (
-              <div className="text-joker-purple flex items-center">
-                <span className="mr-1">🌡️</span>
-                <span className="truncate">
-                  {weather.current_condition[0]?.temp_C}°C - {weather.current_condition[0]?.weatherDesc[0]?.value}
-                </span>
+              <div className="text-joker-purple">
+                🌡️ {weather.current_condition[0]?.temp_C}°C - {weather.current_condition[0]?.weatherDesc[0]?.value}
               </div>
             )}
             {quote && (
-              <div className="text-joker-gold text-xs leading-tight border-t border-joker-purple/30 pt-2">
-                <div className="flex items-start">
-                  <span className="mr-1 flex-shrink-0">💬</span>
-                  <div className="min-w-0">
-                    <p className="truncate">"{quote.content.substring(0, 45)}..."</p>
-                    <p className="text-right text-joker-purple/80 mt-1">- {quote.author}</p>
-                  </div>
-                </div>
+              <div className="text-joker-gold text-xs leading-tight border-t border-joker-purple pt-1 mt-1">
+                💬 "{quote.content.substring(0, 60)}..." - {quote.author}
               </div>
             )}
           </div>
